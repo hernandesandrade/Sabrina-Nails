@@ -1,0 +1,86 @@
+/* Cores */
+.bg-pastel {
+    background-color: #fde4e4; /* Rosa pastel */
+}
+.text-dourado {
+    color: #d4af37; /* Dourado */
+}
+.btn-dourado {
+    background-color: #d4af37;
+    color: #fff;
+    border: none;
+}
+
+/* Fontes */
+.logo {
+    font-family: 'Cursive', sans-serif;
+    font-size: 1.8rem;
+    color: #d4af37;
+}
+
+/* Imagens dos produtos */
+.produto-img {
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+}
+
+/* Offcanvas */
+.offcanvas-title {
+    color: #d4af37;
+    font-size: 1.5rem;
+    font-family: 'Cursive', sans-serif;
+}
+
+/* Remover bordas arredondadas do botão */
+.no-radius {
+    border-radius: 0;
+}
+
+/* Melhorar espaçamento do rodapé */
+footer h5 {
+    color: #d4af37; /* Dourado */
+    font-size: 1.2rem;
+}
+footer p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+/* Divisor sutil entre seções */
+footer hr {
+    border: 0;
+    height: 1px;
+    background-color: #ddd;
+}
+
+/* Ajustar aparência dos cartões */
+.card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 1.5rem;
+    background-color: #fff;
+    text-align: center;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 1.25rem;
+}
+
