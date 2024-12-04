@@ -167,3 +167,6 @@ footer hr {
     color: #333;
     font-weight: bold;
 }
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
