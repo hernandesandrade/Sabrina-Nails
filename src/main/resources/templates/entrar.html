@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragmentos/head :: head('Sabrina Art & Nails', 'login.css')}"></head>
+<body>
+<header th:replace="~{fragmentos/header :: headerGrande}"></header>
+<div th:replace="~{fragmentos/header :: headerPequeno}"></div>
+<main class="bg-pastel py-5">
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Entrar</h2>
+        </div>
+        <form>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Digite seu email">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" class="form-control" id="password" placeholder="Digite sua senha">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        </form>
+        <div class="login-footer">
+            <p>Não tem uma conta? <a href="cadastrar">Cadastre-se</a></p>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragmentos/footer :: footer}"></footer>
+<script th:replace="~{fragmentos/bootStrap :: script}"></script>
+</body>
+</html>

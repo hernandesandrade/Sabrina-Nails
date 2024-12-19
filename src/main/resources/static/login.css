@@ -1,0 +1,74 @@
+    .login-container {
+      max-width: 400px;
+      margin: 50px auto;
+      background-color: #fff;
+      border: 2px solid #d4af37;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .login-header h2 {
+      color: #d4af37;
+      font-weight: bold;
+    }
+
+    .btn-primary {
+      background-color: #d4af37;
+      border-color: #d4af37;
+    }
+
+    .btn-primary:hover {
+      background-color: #e7c23d;
+      border-color: #e7c23d;
+    }
+
+    .form-control:focus {
+      border-color: #d4af37;
+      box-shadow: 0 0 5px #d4af37;
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .login-footer a {
+      color: #d4af37;
+      text-decoration: none;
+    }
+
+    .login-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Ajustes para telas pequenas */
+    @media (max-width: 600px) {
+        .login-container {
+            margin: 20px; /* Espaço nas bordas */
+            padding: 20px; /* Reduz o padding para caber melhor em telas menores */
+        }
+
+        .login-header h2 {
+            font-size: 1.5rem; /* Ajusta o tamanho da fonte do título */
+        }
+
+        .form-control {
+            font-size: 0.9rem; /* Ajusta o tamanho das fontes dos campos */
+            padding: 10px; /* Ajusta o padding para campos menores */
+        }
+
+        .btn-primary {
+            font-size: 1rem; /* Ajusta o tamanho do texto do botão */
+            padding: 10px; /* Ajusta o padding do botão */
+        }
+
+        .login-footer p {
+            font-size: 0.9rem; /* Ajusta o tamanho da fonte do texto do rodapé */
+        }
+    }

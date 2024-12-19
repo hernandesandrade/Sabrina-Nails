@@ -1,0 +1,68 @@
+/* Header */
+.logo {
+    font-family: 'Cursive', sans-serif;
+    font-size: 1.8rem;
+    color: #d4af37;
+}
+
+.navbar-toggler:focus {
+    outline: none; /* Remove a borda de foco */
+    box-shadow: none; /* Remove qualquer sombra que possa estar aplicada */
+}
+
+/* Cores */
+.bg-pastel {
+    background-color: #fde4e4; /* Rosa pastel */
+}
+
+.text-dourado {
+    color: #d4af37; /* Dourado */
+}
+
+/* Botões */
+.btn-dourado {
+    background-color: #d4af37;
+    color: #fff;
+    border: none;
+}
+
+.btn-dourado:hover {
+    background-color: #e7c23d;
+    color: white;
+}
+
+/* Offcanvas */
+.offcanvas-title {
+    color: #d4af37;
+    font-size: 1.5rem;
+    font-family: 'Cursive', sans-serif;
+}
+
+/* Ícones */
+.fab, .fas {
+    margin-right: 8px; /* Espaçamento entre o ícone e o texto */
+}
+
+/* Dropdown - Efeito de hover */
+.navbar-nav .nav-item:hover > .dropdown-menu {
+    display: block;
+}
+
+/* Estilo do menu dropdown */
+.dropdown-menu {
+    border: none; /* Remove a borda padrão do menu */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adiciona uma leve sombra */
+}
+
+/* Estilos específicos para a versão mobile */
+@media (max-width: 768px) {
+  .navbar-nav .nav-item {
+    margin-bottom: 10px; /* Espaçamento entre itens do menu no mobile */
+  }
+}
+
+.dropdown-item:hover {
+    background-color: transparent !important; /* Remove o fundo azulado */
+    color: inherit; /* Mantém a cor original do texto */
+}
+

@@ -1,0 +1,98 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Sabrina Art & Nails', 'inicio.css')}"></head>
+<body>
+
+<header th:replace="~{fragmentos/header :: headerGrande}"></header>
+<div th:replace="~{fragmentos/header :: headerPequeno}"></div>
+
+<main class="bg-pastel py-5">
+    <div class="container">
+        <!-- Seção de Produtos e Serviços -->
+        <section id="produtos-servicos" class="mb-5">
+            <div class="container text-center">
+                <h2 class="text-dourado mb-4">Produtos e Serviços</h2>
+                <div class="row">
+                    <!-- Produtos -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm">
+                            <img src="img/banner-produtos.webp" class="card-img-top" alt="Produtos">
+                            <div class="card-body">
+                                <h5 class="card-title text-dourado">Produtos</h5>
+                                <p class="card-text">Descubra nossa linha de esmaltes, cuidados e acessórios para suas unhas.</p>
+                                <a href="#produtos" class="btn btn-dourado">Ver Produtos</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Serviços -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm">
+                            <img src="img/banner-serviços.webp" class="card-img-top" alt="Serviços">
+                            <div class="card-body">
+                                <h5 class="card-title text-dourado">Serviços</h5>
+                                <p class="card-text">Aproveite serviços exclusivos e se sinta ainda mais especial.</p>
+                                <a href="#servicos" class="btn btn-dourado">Ver Serviços</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Ofertas -->
+        <section id="ofertas" class="mb-5">
+            <h2 class="text-center text-dourado">Produtos e Serviços em Oferta</h2>
+            <div class="row">
+                <!-- Produto 1 -->
+                <div class="col-lg-3 col-sm-6 mb-4">
+                    <div class="card position-relative">
+                        <div class="product-tag">Produto</div>
+                        <img src="https://via.placeholder.com/250" class="card-img-top produto-img" alt="Esmalte Premium">
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">Esmalte Premium Extra Brilho e Longa Duração</h5>
+                            <div class="price-container">
+                                <span class="discounted-price">R$ 15,00</span>
+                                <span class="original-price">R$ 20,00</span>
+                            </div>
+                            <button class="btn btn-dourado w-100">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Produto 2 -->
+                <div class="col-lg-3 col-sm-6 mb-4">
+                    <div class="card position-relative">
+                        <div class="product-tag">Produto</div>
+                        <img src="https://via.placeholder.com/250" class="card-img-top produto-img" alt="Kit Manicure">
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">Kit Manicure Completo com Ferramentas Profissionais</h5>
+                            <div class="price-container">
+                                <span class="discounted-price">R$ 90,00</span>
+                                <span class="original-price">R$ 120,00</span>
+                            </div>
+                            <button class="btn btn-dourado w-100">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Produto 3 -->
+                <div class="col-lg-3 col-sm-6 mb-4">
+                    <div class="card position-relative">
+                        <div class="product-tag">Serviço</div>
+                        <img src="https://via.placeholder.com/250" class="card-img-top produto-img" alt="Hidratação Especial">
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">Hidratação Especial para Cabelos Danificados</h5>
+                            <div class="price-container">
+                                <span class="fixed-price">R$ 50,00</span>
+                            </div>
+                            <button class="btn btn-dourado w-100">Agendar Serviço</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer th:replace="~{fragmentos/footer :: footer}"></footer>
+<script th:replace="~{fragmentos/bootStrap :: script}"></script>
+</body>
+</html>
