@@ -3,7 +3,6 @@ package com.online.commerce.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Controller
 public class GeralController {
 
     @GetMapping("")
@@ -11,9 +10,9 @@ public class GeralController {
         return "inicio";
     }
 
-    @GetMapping("entrar")
+    @GetMapping("login")
     public String login(){
-        return "entrar";
+        return "login";
     }
 
     @GetMapping("cadastrar")

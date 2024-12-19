@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="~{fragmentos/head :: head('Sabrina Art & Nails', 'login.css')}"></head>
+<head th:replace="~{fragmentos/head :: head('Sabrina Art & Nails', 'css/login.css')}"></head>
 <body>
 <header th:replace="~{fragmentos/header :: headerGrande}"></header>
 <div th:replace="~{fragmentos/header :: headerPequeno}"></div>
@@ -9,10 +9,10 @@
     <div class="login-header">
       <h2>Criar Conta</h2>
     </div>
-    <form>
+    <form action="/cadastrar" method="post">
       <div class="mb-3">
         <label for="fullName" class="form-label">Nome Completo</label>
-        <input type="text" class="form-control" id="fullName" required>
+        <input name="name" type="text" class="form-control" id="fullName" required>
       </div>
       <div class="mb-3">
         <label for="celular" class="form-label">Celular</label>
@@ -25,7 +25,7 @@
       </div>
       <div class="mb-3">
         <label for="confirmEmail" class="form-label">Confirmação de Email</label>
-        <input type="email" class="form-control" id="confirmEmail" required>
+        <input name="email" type="email" class="form-control" id="confirmEmail" required>
       </div>
       <div class="mb-3">
         <label for="password" class="form-label">Senha</label>
@@ -33,12 +33,13 @@
       </div>
       <div class="mb-3">
         <label for="confirmPassword" class="form-label">Confirmação de Senha</label>
-        <input type="password" class="form-control" id="confirmPassword" required>
+        <input name="password" type="password" class="form-control" id="confirmPassword" required>
       </div>
+      <p class="login-erro" th:text="${error}"></p>
       <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
     </form>
     <div class="login-footer">
-      <p>Já tem uma conta? <a href="entrar">Entre aqui</a></p>
+      <p>Já tem uma conta? <a href="login">Entre aqui</a></p>
     </div>
   </div>
 </main>

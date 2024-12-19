@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head th:replace="~{fragmentos/head :: head('Sabrina Art & Nails', 'login.css')}"></head>
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Sabrina Art & Nails', 'css/login.css')}"></head>
 <body>
 <header th:replace="~{fragmentos/header :: headerGrande}"></header>
 <div th:replace="~{fragmentos/header :: headerPequeno}"></div>
@@ -9,15 +9,17 @@
         <div class="login-header">
             <h2>Entrar</h2>
         </div>
-        <form>
+        <form action="/login" method="post">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Digite seu email">
+                <input name="email" type="email" class="form-control" id="email" placeholder="Digite seu email">
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Senha</label>
-                <input type="password" class="form-control" id="password" placeholder="Digite sua senha">
+                <input name="password" type="password" class="form-control" id="password" placeholder="Digite sua senha">
             </div>
+            <p class="login-erro" th:text="${error}"></p>
+            <p class="login-sucess" th:text="${message}"></p>
             <button type="submit" class="btn btn-primary w-100">Entrar</button>
         </form>
         <div class="login-footer">
