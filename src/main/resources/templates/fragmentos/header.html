@@ -12,10 +12,14 @@
           <li class="nav-item"><a class="nav-link text-dark" href="#produtos">Produtos</a></li>
           <li class="nav-item"><a class="nav-link text-dark" href="#servicos">Serviços</a></li>
           <li class="nav-item dropdown">
-            <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link text-dark dropdown-toggle" href="#">
               Contato
             </a>
             <ul th:replace="~{fragmentos/header/contato :: contatos(navbarDropdown)}"></ul>
+          </li>
+          <li th:if="${rule} == 'ADMIN'" class="nav-item">
+            <a class="nav-link text-dark dropdown-toggle" href="#">Administração</a>
+            <ul th:replace="~{fragmentos/header/administracao :: administracao}"></ul>
           </li>
         </ul>
         <ul class="navbar-nav">
@@ -24,7 +28,10 @@
 
 
           <span th:if="${user}">
-            <li class="nav-item"><a class="nav-link text-dark dropdown-toggle" th:text="'Olá, ' + ${user.name}" href="#">Nome</a></li>
+
+            <li class="nav-item"><a class="nav-link text-dark dropdown-toggle" th:text="'Olá, ' + ${user.name}" href="#">Nome</a>
+              <ul th:replace="~{fragmentos/header/usuario :: usuario}"></ul>
+            </li>
           </span>
           <span th:unless="${user}">
             <li class="nav-item"><a class="nav-link text-dark" href="login">Entrar/Registrar</a></li>

@@ -39,26 +39,36 @@ public class AuthController {
     @Autowired
     private HttpSessionRequestCache requestCache;
 
+    @GetMapping("/")
+    public String home(Model model, HttpServletRequest request) {
+        checkAuth(model, request);
+        return "inicio";
+    }
+
     // Exibe a página de login
     @GetMapping("/login")
-    public String loginPage() {
+    public String loginPage(Model model, HttpServletRequest request) {
+        checkAuth(model, request);
         return "login";
+    }
+
+    @GetMapping("/cadastrar")
+    public String reg(Model model, HttpServletRequest request){
+        checkAuth(model, request);
+        return "cadastrar";
     }
 
     @PostMapping("/login")
     public String login(@ModelAttribute LoginRequestDTO loginRequestDTO, Model model, HttpServletResponse response, HttpServletRequest request) {
-        // Verifica o usuário e valida as credenciais
         User user = userRepository.findByEmail(loginRequestDTO.email())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
         if (!passwordEncoder.matches(loginRequestDTO.password(), user.getPassword())) {
             model.addAttribute("error", "Credenciais inválidas");
             return "login"; // Se as credenciais forem inválidas, retorna para a página de login
         }
 
-        // Gera o token
         String token = tokenService.generateToken(user);
 
-        // Adiciona o token em um cookie HTTP
         Cookie cookie = new Cookie("auth_token", token);
         cookie.setHttpOnly(true); // Aumenta a segurança
         cookie.setPath("/"); // Define o caminho do cookie
@@ -79,11 +89,6 @@ public class AuthController {
         return "redirect:inicio";
     }
 
-    @GetMapping("/cadastrar")
-    public String reg(){
-        return "cadastrar";
-    }
-
     // Processa o registro
     @PostMapping("/cadastrar")
     public String register(@ModelAttribute RegisterRequestDTO registerRequestDTO, Model model) {
@@ -100,8 +105,7 @@ public class AuthController {
         return "login";
     }
 
-    @GetMapping("/")
-    public String home(Model model, HttpServletRequest request) {
+    private void checkAuth(Model model, HttpServletRequest request){
         String token = securityFilter.extractTokenFromCookies(request);
         if (token != null) {
             String email = tokenService.validateToken(token);
@@ -110,10 +114,10 @@ public class AuthController {
                 if (userOptional.isPresent()) {
                     User user = userOptional.get();
                     model.addAttribute("user", user);
+                    model.addAttribute("rule", user.getRule());
                 }
             }
         }
-        return "inicio";
     }
 
 
