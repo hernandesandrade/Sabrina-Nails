@@ -1,0 +1,74 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Gestão de Produtos', 'css/gestaoProdutos.css')}"></head>
+<body>
+
+<header th:replace="~{fragmentos/header :: headerGrande}"></header>
+<div th:replace="~{fragmentos/header :: headerPequeno}"></div>
+
+<main class="bg-pastel py-5">
+  <div class="container">
+    <!-- Seção de Gestão de Produtos -->
+    <section id="gestao-produtos" class="mb-5">
+      <h2 class="text-dourado mb-4">Gestão de Produtos</h2>
+
+      <!-- Barra de pesquisa -->
+      <div class="row mb-4">
+        <form th:action="@{/gestao-produtos}" method="get" class="col-12">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar produto..." name="pesquisa" th:value="${pesquisa}">
+            <div class="input-group-append">
+              <button class="btn btn-dourado" type="submit">Pesquisar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="row mb-4">
+        <a href="/gestao-produtos/novo" class="btn btn-dourado">Novo Produto</a>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Preço</th>
+              <th scope="col">Preço DePor</th>
+              <th scope="col">Estoque</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="produto : ${produtos}">
+              <th class="col-1" scope="row" th:text="${produto.id}">ID</th>
+              <td class="col-4" th:text="${produto.nome}">Nome do Produto</td>
+              <td class="col-2" th:text="${produto.preco}">Preço</td>
+              <td class="col-2" th:text="${produto.precoDePor}">Preço DePor</td>
+              <td class="col-2" th:text="${produto.estoque}">Estoque</td>
+              <td class="col-1">
+                <a th:href="@{/gestao-produtos/produto/{produtoId}(produtoId = ${produto.id})}" class="btn">Detalhes</a>
+              </td>
+              <td class="col-1">
+                <a th:href="@{/gestao-produtos/editar/{produtoId}(produtoId = ${produto.id})}" class="btn">Editar</a>
+              </td>
+              <td class="col-1">
+                <a class="btn">Deletar</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer th:replace="~{fragmentos/footer :: footer}"></footer>
+<script th:replace="~{fragmentos/bootStrap :: script}"></script>
+</body>
+</html>

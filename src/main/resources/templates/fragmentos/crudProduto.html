@@ -1,0 +1,42 @@
+<div th:fragment="crud(h1)" class="container-novo">
+  <h2 class="text-dourado mb-4" th:text="${h1}"></h2>
+  <form th:object="${produto}" action="/gestao-produtos/salvar" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="nome" class="form-label">Nome</label>
+      <input th:field="*{nome}" name="nome" type="text" class="form-control" id="nome" required>
+    </div>
+    <div class="mb-3">
+      <label for="descricao" class="form-label">Descrição</label>
+      <textarea th:field="*{descricao}" name="descricao" class="form-control" id="descricao" rows="3" placeholder="Digite a descrição do produto"></textarea>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <label for="preco" class="form-label">Preço</label>
+        <input th:field="*{preco}" name="preco" type="number" step="0.01" class="form-control" id="preco" placeholder="Digite o preço" required>
+      </div>
+      <div class="col">
+        <label for="precoDePor" class="form-label">Preço DePor</label>
+        <input th:field="*{precoDePor}" name="precoDePor" type="number" step="0.01" class="form-control" id="precoDePor" placeholder="Digite o preço promocional">
+      </div>
+    </div>
+
+    <!-- Container de upload de imagens -->
+    <div class="image-upload-container">
+      <label for="fotos" class="custom-file-label">
+        <div class="upload-region">
+          <i class="fas fa-upload"></i> Selecione ou arraste suas imagens aqui
+        </div>
+      </label>
+      <input id="fotos" name="fotos" type="file" accept="image/*" multiple style="display: none;">
+      <div id="preview-container" class="row gy-3">
+        <!-- Aqui serão exibidas as imagens previamente carregadas -->
+        <div th:each="imagem : ${imagens}" class="col-md-3 position-relative">
+          <img th:src="@{'/upload/' + ${imagem.nomeArquivo}}" alt="Imagem do Produto">
+          <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" th:data-imagem-id="${imagem.id}" onclick="removerImagem(this)">x</button>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-dourado mt-4 w-100">Salvar Produto</button>
+  </form>
+</div>

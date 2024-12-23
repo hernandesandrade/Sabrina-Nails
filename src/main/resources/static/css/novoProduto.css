@@ -1,0 +1,194 @@
+.container-novo {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Formulário */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+textarea {
+    resize: none;
+    height: 100px;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: #6c757d;
+    box-shadow: 0 0 5px rgba(108, 117, 125, 0.5);
+}
+
+/* Botões */
+button {
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #5a6268;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Galeria de Fotos */
+.galeria-fotos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.galeria-fotos .foto-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #f1f1f1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.galeria-fotos img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.galeria-fotos .remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 0, 0, 0.7);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.galeria-fotos .remove-btn:hover {
+    background-color: rgba(255, 0, 0, 1);
+}
+
+.image-upload-container {
+    border: 2px dashed #d3d3d3;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.image-upload-container:hover {
+    background-color: #f1f1f1;
+    border-color: #a5a5a5;
+}
+
+.custom-file-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.custom-file-label i {
+    margin-right: 10px;
+    font-size: 20px;
+    color: #777;
+}
+
+#fotos {
+    display: none; /* Esconde o input padrão */
+}
+
+#preview-container {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#preview-container .col-md-3 {
+    flex: 0 1 calc(25% - 10px);
+    max-width: calc(25% - 10px);
+    position: relative;
+}
+
+#preview-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    transition: transform 0.2s ease;
+}
+
+#preview-container img:hover {
+    transform: scale(1.05);
+}
+
+#preview-container button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 0, 0, 0.8);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 14px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+#preview-container button:hover {
+    background-color: red;
+}
+
+.image-upload-container.dragging {
+    background-color: #e3e3e3;
+    border-color: #888;
+}

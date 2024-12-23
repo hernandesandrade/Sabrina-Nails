@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Sabrina Art & Nails', 'css/inicio.css')}"></head>
+<body>
+
+<header th:replace="~{fragmentos/header :: headerGrande}"></header>
+<div th:replace="~{fragmentos/header :: headerPequeno}"></div>
+
+<main class="bg-pastel py-5">
+  <div class="container">
+    <!-- Seção de Produtos -->
+    <section id="produtos" class="mb-5">
+      <div class="container text-center">
+        <h2 class="text-dourado mb-4">Produtos Disponíveis</h2>
+        <div class="row">
+          <!-- Iterando sobre os produtos -->
+          <div class="col-lg-3 col-sm-6 mb-4" th:each="produto : ${produtos}">
+            <div class="card position-relative">
+              <div class="product-tag" th:text="${produto.nome}"></div>
+              <!-- Imagem do Produto -->
+              <img href="#" class="card-img-top produto-img" alt="Produto">
+              <div class="card-body">
+                <h5 class="card-title text-truncate" th:text="${produto.nome}"></h5>
+                <p class="card-text" th:text="${produto.descricao}"></p>
+                <div class="price-container">
+                  <div th:if="${produto.precoDePor > 0}">
+                    <span class="discounted-price" th:text="${produto.precoDePor}"></span>
+                    <span class="original-price" th:text="${produto.preco}"></span>
+                  </div>
+                  <div th:if="${produto.precoDePor <= 0}">
+                    <span class="discounted-price" th:text="${produto.preco}"></span>
+                  </div>
+                </div>
+                <button class="btn btn-dourado w-100">Adicionar ao Carrinho</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer th:replace="~{fragmentos/footer :: footer}"></footer>
+<script th:replace="~{fragmentos/bootStrap :: script}"></script>
+</body>
+</html>

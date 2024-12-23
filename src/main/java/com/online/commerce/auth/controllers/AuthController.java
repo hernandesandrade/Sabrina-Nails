@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Optional;
-
 @Controller
 public class AuthController {
 
@@ -39,22 +37,14 @@ public class AuthController {
     @Autowired
     private HttpSessionRequestCache requestCache;
 
-    @GetMapping("/")
-    public String home(Model model, HttpServletRequest request) {
-        checkAuth(model, request);
-        return "inicio";
-    }
-
     // Exibe a página de login
     @GetMapping("/login")
     public String loginPage(Model model, HttpServletRequest request) {
-        checkAuth(model, request);
         return "login";
     }
 
     @GetMapping("/cadastrar")
     public String reg(Model model, HttpServletRequest request){
-        checkAuth(model, request);
         return "cadastrar";
     }
 
@@ -83,13 +73,6 @@ public class AuthController {
         }
     }
 
-
-    @GetMapping("/logout")
-    public String logout(){
-        return "redirect:inicio";
-    }
-
-    // Processa o registro
     @PostMapping("/cadastrar")
     public String register(@ModelAttribute RegisterRequestDTO registerRequestDTO, Model model) {
         if (userRepository.findByEmail(registerRequestDTO.email()).isPresent()) {
@@ -105,21 +88,10 @@ public class AuthController {
         return "login";
     }
 
-    private void checkAuth(Model model, HttpServletRequest request){
-        String token = securityFilter.extractTokenFromCookies(request);
-        if (token != null) {
-            String email = tokenService.validateToken(token);
-            if (email != null) {
-                Optional<User> userOptional = userRepository.findByEmail(email);
-                if (userOptional.isPresent()) {
-                    User user = userOptional.get();
-                    model.addAttribute("user", user);
-                    model.addAttribute("rule", user.getRule());
-                }
-            }
-        }
+    @GetMapping("/logout")
+    public String logout(){
+        return "redirect:inicio";
     }
-
 
 
 }

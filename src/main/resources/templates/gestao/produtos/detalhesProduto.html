@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Detalhes do Produto', '/css/novoProduto.css')}"></head>
+<body>
+<header th:replace="~{fragmentos/header :: headerGrande}"></header>
+<div th:replace="~{fragmentos/header :: headerPequeno}"></div>
+
+<main class="bg-pastel py-5">
+  <div class="container-novo">
+    <h2 class="text-dourado mb-4">Detalhes do Produto</h2>
+
+    <div class="mb-3">
+      <label for="id" class="form-label">ID</label>
+      <input type="text" class="form-control" id="id" th:value="${produto.id}" disabled>
+    </div>
+    <div class="mb-3">
+      <label for="nome" class="form-label">Nome</label>
+      <input type="text" class="form-control" id="nome" th:value="${produto.nome}" disabled>
+    </div>
+    <div class="mb-3">
+      <label for="descricao" class="form-label">Descrição</label>
+      <textarea class="form-control" id="descricao" rows="3" disabled th:text="${produto.descricao}"></textarea>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <label for="preco" class="form-label">Preço</label>
+        <input type="text" class="form-control" id="preco" th:value="${produto.preco}" disabled>
+      </div>
+      <div class="col">
+        <label for="precoDePor" class="form-label">Preço DePor</label>
+        <input type="text" class="form-control" id="precoDePor" th:value="${produto.precoDePor}" disabled>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="estoque" class="form-label">Estoque</label>
+      <input type="number" class="form-control" id="estoque" th:value="${produto.estoque}" disabled>
+    </div>
+    <div class="mb-3">
+      <label for="dataCriacao" class="form-label">Data de Criação</label>
+      <input type="text" class="form-control" id="dataCriacao" th:value="${formattedDate}" disabled>
+    </div>
+    <div class="mb-3">
+      <label for="dataUltimaAtualizacao" class="form-label">Data Última Atualização</label>
+      <input type="text" class="form-control" id="dataUltimaAtualizacao" th:value="${formattedDate}" disabled>
+    </div>
+
+    <!-- Galeria de Imagens -->
+    <h4>Imagens</h4>
+    <div class="galeria-fotos">
+      <div class="foto-container" th:each="imagem : ${produto.imagens}">
+        <img th:src="@{'/upload/' + ${imagem.nomeArquivo}}" alt="Imagem do produto" />
+      </div>
+    </div>
+
+
+  </div>
+</main>
+
+<footer th:replace="~{fragmentos/footer :: footer}"></footer>
+
+<script th:replace="~{fragmentos/bootStrap :: script}"></script>
+</body>
+</html>

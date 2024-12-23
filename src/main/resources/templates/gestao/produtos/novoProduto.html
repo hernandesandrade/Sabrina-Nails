@@ -1,0 +1,131 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Novo Produto', '/css/novoProduto.css')}"></head>
+<body>
+<header th:replace="~{fragmentos/header :: headerGrande}"></header>
+<div th:replace="~{fragmentos/header :: headerPequeno}"></div>
+
+<main class="bg-pastel py-5">
+  <div class="container-novo">
+    <h2 class="text-dourado mb-4">Novo Produto</h2>
+    <form th:object="${produto}" action="/gestao-produtos/salvar" method="post" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="nome" class="form-label">Nome</label>
+        <input th:field="*{nome}" name="nome" type="text" class="form-control" id="nome" required>
+      </div>
+      <div class="mb-3">
+        <label for="descricao" class="form-label">Descrição</label>
+        <textarea th:field="*{descricao}" name="descricao" class="form-control" id="descricao" rows="3" placeholder="Digite a descrição do produto"></textarea>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label for="preco" class="form-label">Preço</label>
+          <input th:field="*{preco}" name="preco" type="number" step="0.01" class="form-control" id="preco" placeholder="Digite o preço" required>
+        </div>
+        <div class="col">
+          <label for="precoDePor" class="form-label">Preço DePor</label>
+          <input th:field="*{precoDePor}" name="precoDePor" type="number" step="0.01" class="form-control" id="precoDePor" placeholder="Digite o preço promocional">
+        </div>
+      </div>
+
+      <!-- Container de upload de imagens -->
+      <div class="image-upload-container">
+        <label for="fotos" class="custom-file-label">
+          <div class="upload-region">
+            <i class="fas fa-upload"></i> Selecione ou arraste suas imagens aqui
+          </div>
+        </label>
+        <input id="fotos" name="fotos" type="file" accept="image/*" multiple style="display: none;">
+        <div id="preview-container" class="row gy-3">
+          <!-- Aqui serão exibidas as imagens previamente carregadas -->
+          <div th:each="imagem : ${imagens}" class="col-md-3 position-relative">
+            <img th:src="@{'/upload/' + ${imagem.nomeArquivo}}" alt="Imagem do Produto">
+            <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" th:data-imagem-id="${imagem.id}" onclick="removerImagem(this)">x</button>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-dourado mt-4 w-100">Salvar Produto</button>
+    </form>
+  </div>
+
+</main>
+
+<footer th:replace="~{fragmentos/footer :: footer}"></footer>
+<script th:replace="~{fragmentos/bootStrap :: script}"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const fotosInput = document.getElementById('fotos');
+    const previewContainer = document.getElementById('preview-container');
+    let selectedFiles = []; // Lista de arquivos gerenciada manualmente
+
+    fotosInput.addEventListener('change', () => {
+      // Adiciona novos arquivos sem duplicar
+      const newFiles = Array.from(fotosInput.files);
+      newFiles.forEach(file => {
+        if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+          selectedFiles.push(file);
+        }
+      });
+
+      renderPreview();
+    });
+
+    // Disparar o input de arquivos ao clicar na região da div
+    const uploadRegion = document.querySelector('.upload-region');
+    uploadRegion.addEventListener('click', (event) => {
+      // Previne o comportamento padrão de clique no label
+      event.preventDefault();
+
+      // Garante que o input de arquivos seja acionado
+      fotosInput.click();
+    });
+
+    function renderPreview() {
+      // Limpa o container de preview
+      previewContainer.innerHTML = '';
+
+      selectedFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          // Cria elementos para exibir a imagem e o botão de remoção
+          const colDiv = document.createElement('div');
+          colDiv.className = 'col-md-3 position-relative';
+
+          const img = document.createElement('img');
+          img.src = reader.result;
+          img.className = 'img-fluid rounded border';
+
+          const closeButton = document.createElement('button');
+          closeButton.className = 'btn btn-danger btn-sm position-absolute top-0 end-0';
+          closeButton.textContent = 'x';
+          closeButton.type = 'button';
+
+          // Configura o evento para remover o arquivo da lista e atualizar o preview
+          closeButton.addEventListener('click', () => {
+            selectedFiles.splice(index, 1);
+            renderPreview();
+            updateInputFiles();
+          });
+
+          colDiv.appendChild(img);
+          colDiv.appendChild(closeButton);
+          previewContainer.appendChild(colDiv);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      updateInputFiles();
+    }
+
+    function updateInputFiles() {
+      // Atualiza os arquivos no input de acordo com `selectedFiles`
+      const dataTransfer = new DataTransfer();
+      selectedFiles.forEach(file => dataTransfer.items.add(file));
+      fotosInput.files = dataTransfer.files;
+    }
+  });
+</script>
+</body>
+</html>

@@ -28,13 +28,12 @@
 
 
           <span th:if="${user}">
-
-            <li class="nav-item"><a class="nav-link text-dark dropdown-toggle" th:text="'Olá, ' + ${user.name}" href="#">Nome</a>
+            <li class="nav-item"><a class="nav-link text-dark dropdown-toggle" th:text="'Olá, ' + ${userName}" href="#">Nome</a>
               <ul th:replace="~{fragmentos/header/usuario :: usuario}"></ul>
             </li>
           </span>
           <span th:unless="${user}">
-            <li class="nav-item"><a class="nav-link text-dark" href="login">Entrar/Registrar</a></li>
+            <li class="nav-item"><a class="nav-link text-dark" href="login">Entrar/Cadastrar</a></li>
           </span>
 
 
