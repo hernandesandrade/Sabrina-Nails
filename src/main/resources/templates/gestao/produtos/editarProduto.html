@@ -54,6 +54,8 @@
 <footer th:replace="~{fragmentos/footer :: footer}"></footer>
 <script th:replace="~{fragmentos/bootStrap :: script}"></script>
 
+<script th:replace="~{fragmentos/bootStrap :: script}"></script>
+
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const fotosInput = document.getElementById('fotos');
@@ -70,25 +72,29 @@
       });
 
       renderPreview();
+      updateInputFiles();
     });
 
     // Disparar o input de arquivos ao clicar na região da div
     const uploadRegion = document.querySelector('.upload-region');
     uploadRegion.addEventListener('click', (event) => {
-      // Previne o comportamento padrão de clique no label
       event.preventDefault();
-
-      // Garante que o input de arquivos seja acionado
       fotosInput.click();
     });
 
     function renderPreview() {
-      selectedFiles.forEach((file, index) => {
+      // Atualiza o preview apenas com novas imagens
+      const existingPreviews = Array.from(previewContainer.children);
+      const existingFiles = existingPreviews.map(preview => preview.getAttribute('data-file-name'));
+
+      selectedFiles.forEach((file) => {
+        if (existingFiles.includes(file.name)) return;
+
         const reader = new FileReader();
         reader.onload = () => {
-          // Cria elementos para exibir a imagem e o botão de remoção
           const colDiv = document.createElement('div');
           colDiv.className = 'col-md-3 position-relative';
+          colDiv.setAttribute('data-file-name', file.name);
 
           const img = document.createElement('img');
           img.src = reader.result;
@@ -101,8 +107,16 @@
 
           // Configura o evento para remover o arquivo da lista e atualizar o preview
           closeButton.addEventListener('click', () => {
-            selectedFiles.splice(index, 1);
-            renderPreview();
+            // Remover o arquivo da lista selectedFiles
+            selectedFiles = selectedFiles.filter(f => f.name !== file.name);
+
+            // Atualiza o campo "imagensExcluidas"
+            addToExcludedImages(file.name);
+
+            // Remover a imagem do DOM
+            colDiv.remove();
+
+            // Atualiza os arquivos no input
             updateInputFiles();
           });
 
@@ -112,8 +126,6 @@
         };
         reader.readAsDataURL(file);
       });
-
-      updateInputFiles();
     }
 
     function updateInputFiles() {
@@ -122,9 +134,18 @@
       selectedFiles.forEach(file => dataTransfer.items.add(file));
       fotosInput.files = dataTransfer.files;
     }
+
+    function addToExcludedImages(imageName) {
+      // Adiciona o nome da imagem ao campo "imagensExcluidas"
+      let imagensExcluidas = document.getElementById('imagensExcluidas').value;
+      imagensExcluidas = imagensExcluidas ? imagensExcluidas.split(',') : [];
+      if (!imagensExcluidas.includes(imageName)) {
+        imagensExcluidas.push(imageName);
+        document.getElementById('imagensExcluidas').value = imagensExcluidas.join(',');
+      }
+    }
   });
 
-  // Adiciona as imagens existentes ao campo de imagens excluídas
   function adicionarImagensExistentes(imagensExistentes) {
     let imagensExcluidas = document.getElementById('imagensExcluidas').value;
 
@@ -146,11 +167,7 @@
     document.getElementById('imagensExcluidas').value = imagensExcluidas.join(',');
   }
 
-  // Exemplo de como chamar a função (supondo que você tenha um array com os IDs das imagens existentes):
-  // adicionarImagensExistentes([1, 2, 3]); // IDs das imagens existentes no produto
 
-
-  // Função para remover imagens existentes
   function removerImagem(button) {
     const imagemId = button.getAttribute('data-imagem-id');
     // Adiciona o ID da imagem no campo oculto
@@ -162,7 +179,29 @@
     button.closest('.col-md-3').remove();
   }
 
+  // Exemplo de envio assíncrono usando fetch
+  function uploadImage(file) {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    fetch('/upload', {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => {
+      if (data.success) {
+        // Exibe a imagem no site após o upload
+        const imgElement = document.createElement('img');
+        imgElement.src = data.imageUrl;  // Supondo que o servidor retorna a URL da imagem
+        document.getElementById('preview-container').appendChild(imgElement);
+      }
+    })
+      .catch(error => console.error('Erro ao fazer o upload da imagem:', error));
+  }
+
 
 </script>
+
 </body>
 </html>

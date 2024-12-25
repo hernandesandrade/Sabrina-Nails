@@ -193,7 +193,7 @@ public class GestaoProdutosController {
 
                     // Criar diretórios, se necessário
                     Files.createDirectories(filePath.getParent());
-
+                    foto.transferTo(filePath);
                     // Criar a referência da imagem no banco de dados
                     ImagemProduto imagem = new ImagemProduto();
                     imagem.setProduto(produtoExistente);
