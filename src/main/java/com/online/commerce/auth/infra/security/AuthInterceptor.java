@@ -26,7 +26,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView mv) throws Exception {
-        if (mv != null) {
+        if (mv != null && mv.getViewName() != null && !mv.getViewName().startsWith("redirect:")) {
             checkAuth(mv, request);
         }
     }

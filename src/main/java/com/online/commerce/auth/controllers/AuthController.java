@@ -49,29 +49,41 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute LoginRequestDTO loginRequestDTO, Model model, HttpServletResponse response, HttpServletRequest request) {
+    public String login(
+            @ModelAttribute LoginRequestDTO loginRequestDTO,
+            Model model,
+            HttpServletResponse response,
+            HttpServletRequest request) {
+
         User user = userRepository.findByEmail(loginRequestDTO.email())
-                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+
         if (!passwordEncoder.matches(loginRequestDTO.password(), user.getPassword())) {
             model.addAttribute("error", "Credenciais inválidas");
-            return "login"; // Se as credenciais forem inválidas, retorna para a página de login
+            return "login"; // Retorna para a página de login em caso de erro
         }
 
+        // Gera e adiciona o token como cookie
         String token = tokenService.generateToken(user);
-
         Cookie cookie = new Cookie("auth_token", token);
-        cookie.setHttpOnly(true); // Aumenta a segurança
-        cookie.setPath("/"); // Define o caminho do cookie
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
         response.addCookie(cookie);
 
-        // Salva o request original, para redirecionar após o login
+        // Recupera a URL original armazenada no RequestCache
         SavedRequest savedRequest = requestCache.getRequest(request, response);
+
         if (savedRequest != null) {
-            return "redirect:" + savedRequest.getRedirectUrl();
-        } else {
-            return "redirect:/"; // Se não houver página anterior, redireciona para o home
+            String redirectUrl = savedRequest.getRedirectUrl();
+
+            // Remove parâmetros da URL se existirem
+            return "redirect:" + redirectUrl;
         }
+
+        // Redireciona para a página inicial limpa, caso não exista uma URL salva
+        return "redirect:/";
     }
+
 
     @PostMapping("/cadastrar")
     public String register(@ModelAttribute RegisterRequestDTO registerRequestDTO, Model model) {

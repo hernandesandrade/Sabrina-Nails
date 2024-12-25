@@ -16,8 +16,8 @@ public class GeralController {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    @GetMapping("")
-    public String home(Model model, HttpServletRequest request) {
+    @GetMapping("/")
+    public String home() {
         return "inicio";
     }
 

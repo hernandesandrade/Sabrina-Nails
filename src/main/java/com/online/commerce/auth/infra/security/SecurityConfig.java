@@ -1,5 +1,7 @@
 package com.online.commerce.auth.infra.security;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,6 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/img/**").permitAll()
                         .anyRequest().authenticated()
                 )
+                
                 .logout(logout -> logout
                         .logoutUrl("/logout") // URL para fazer logout
                         .logoutSuccessUrl("/") // Redireciona após logout
@@ -49,7 +52,19 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")) // Redireciona para /login
                 )
+                .requestCache(requestCacheConfigurer -> requestCacheConfigurer
+                        .requestCache(new HttpSessionRequestCache() {
+                            @Override
+                            public void saveRequest(HttpServletRequest request, HttpServletResponse response) {
+                                // Ignorar solicitações para favicon.ico
+                                if (!request.getRequestURI().contains("favicon.ico")) {
+                                    super.saveRequest(request, response);
+                                }
+                            }
+                        })
+                )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         // Não adicione a configuração formLogin aqui
         return http.build();
