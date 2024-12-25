@@ -57,6 +57,13 @@
 <script th:replace="~{fragmentos/bootStrap :: script}"></script>
 
 <script>
+  window.addEventListener("beforeunload", function () {
+    // Substitui o estado atual no histórico com outra URL
+    history.replaceState(null, null, "/gestao-produtos");
+  });
+</script>
+
+<script>
   document.addEventListener("DOMContentLoaded", () => {
     const fotosInput = document.getElementById('fotos');
     const previewContainer = document.getElementById('preview-container');

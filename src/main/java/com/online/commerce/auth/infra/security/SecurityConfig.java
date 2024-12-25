@@ -23,9 +23,6 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 public class SecurityConfig {
 
     @Autowired
-    private CustomUserDetailsService userDetailsService;
-
-    @Autowired
     SecurityFilter securityFilter;
 
     @Bean
@@ -38,7 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
 
                         .requestMatchers("/login", "/cadastrar", "/", "/error").permitAll()
-                        .requestMatchers("/css/**", "/img/**").permitAll()
+                        .requestMatchers("/img/**", "/static/**", "/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 

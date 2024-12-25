@@ -29,21 +29,23 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String token = extractTokenFromCookies(request);
-
         if (token != null) {
             String email = tokenService.validateToken(token);
             if (email != null) {
-                Optional<User> userOptional = userRepository.findByEmail(email);
-                if (userOptional.isPresent()) {
-                    User user = userOptional.get();
+                if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                    // Execute a lógica de autenticação
+                    Optional<User> userOptional = userRepository.findByEmail(email);
+                    if (userOptional.isPresent()) {
+                        User user = userOptional.get();
 
-                    // Autenticar o usuário no contexto de segurança
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                            user.getEmail(),
-                            null,
-                            null // Adicione roles/authorities aqui, se necessário
-                    );
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                        // Autenticar o usuário no contexto de segurança
+                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                                user.getEmail(),
+                                null,
+                                null // Adicione roles/authorities aqui, se necessário
+                        );
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
                 }
             }
         }

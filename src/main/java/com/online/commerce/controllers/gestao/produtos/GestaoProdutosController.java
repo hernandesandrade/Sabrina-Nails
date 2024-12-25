@@ -6,6 +6,7 @@ import com.online.commerce.auth.repositories.ImagemProdutoRepository;
 import com.online.commerce.auth.repositories.ProdutoRepository;
 import com.online.commerce.services.ProdutoService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +20,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -157,6 +156,7 @@ public class GestaoProdutosController {
         produtoExistente.setDescricao(produto.getDescricao());
         produtoExistente.setPreco(produto.getPreco());
         produtoExistente.setPrecoDePor(produto.getPrecoDePor());
+        produtoExistente.setAtualizadoEm(LocalDateTime.now());
 
         // Salvar o produto atualizado
         produtoRepository.save(produtoExistente);
@@ -190,7 +190,6 @@ public class GestaoProdutosController {
                     // Gerar o nome do arquivo
                     String uuidFileName = produto.getId() + "_" + UUID.randomUUID().toString() + "." + Objects.requireNonNull(foto.getContentType()).split("/")[1];
                     Path filePath = Paths.get(UPLOAD_DIR, uuidFileName);
-
                     // Criar diretórios, se necessário
                     Files.createDirectories(filePath.getParent());
                     foto.transferTo(filePath);
@@ -203,6 +202,7 @@ public class GestaoProdutosController {
                     // Salvar no banco de dados
                     imagemProdutoRepository.save(imagem);
                 }
+
             } catch (IOException e) {
                 redirectAttributes.addFlashAttribute("message", "Erro ao salvar imagem: " + e.getMessage());
                 return "redirect:/gestao-produtos/editar/" + produtoExistente.getId();
