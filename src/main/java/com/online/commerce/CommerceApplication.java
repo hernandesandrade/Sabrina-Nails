@@ -14,5 +14,5 @@ public class CommerceApplication {
 		System.out.println(dbPassword);
 		SpringApplication.run(CommerceApplication.class, args);
 	}
-
+//quando adiciono 3 imagens e removo uma no mesmo momento e tento salvar, gera um erro.
 }

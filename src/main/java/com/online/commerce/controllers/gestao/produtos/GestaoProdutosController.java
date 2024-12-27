@@ -6,7 +6,6 @@ import com.online.commerce.auth.repositories.ImagemProdutoRepository;
 import com.online.commerce.auth.repositories.ProdutoRepository;
 import com.online.commerce.services.ProdutoService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,15 +42,11 @@ public class GestaoProdutosController {
     @GetMapping("")
     public String gestaoProdutos(@RequestParam(name = "pesquisa", required = false) String pesquisa, Model model, HttpServletRequest request){
         List<Produto> produtos;
-        long i = 0;
         if (pesquisa != null && !pesquisa.trim().isEmpty()){
-            try {
-                i = Long.parseLong(pesquisa);
-                produtos = produtoRepository.findAllById(i);
-                System.out.println("id");
-            }catch (Exception e){
+            if (pesquisa.matches("\\d+")){
+                produtos = produtoRepository.findAllById(Long.parseLong(pesquisa));
+            }else{
                 produtos = produtoRepository.findByNomeContainingIgnoreCase(pesquisa);
-                System.out.println("nome");
             }
         }else {
             produtos = produtoRepository.findAll(); // Caso contrário, busca todos os produtos
@@ -144,6 +139,9 @@ public class GestaoProdutosController {
                                 @RequestParam("imagensExcluidas") String imagensExcluidas,
                                 Produto produto, RedirectAttributes redirectAttributes) {
 
+
+
+
         // Buscar o produto existente
         Produto produtoExistente = produtoRepository.findById(id).orElse(null);
         if (produtoExistente == null) {
@@ -163,6 +161,7 @@ public class GestaoProdutosController {
 
         // Processar as imagens para excluir
         if (!imagensExcluidas.isEmpty()) {
+            System.out.println(imagensExcluidas);
             List<Long> idsImagensExcluidas = Arrays.stream(imagensExcluidas.split(","))
                     .map(Long::parseLong)
                     .toList();
@@ -190,6 +189,7 @@ public class GestaoProdutosController {
                     // Gerar o nome do arquivo
                     String uuidFileName = produto.getId() + "_" + UUID.randomUUID().toString() + "." + Objects.requireNonNull(foto.getContentType()).split("/")[1];
                     Path filePath = Paths.get(UPLOAD_DIR, uuidFileName);
+                    System.out.println(uuidFileName);
                     // Criar diretórios, se necessário
                     Files.createDirectories(filePath.getParent());
                     foto.transferTo(filePath);
