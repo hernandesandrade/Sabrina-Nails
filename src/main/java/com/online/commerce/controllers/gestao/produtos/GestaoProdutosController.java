@@ -241,6 +241,12 @@ public class GestaoProdutosController {
     @GetMapping("/deletar/{id}")
     public String deletarProduto(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
+            Produto p = produtoRepository.findById(id).orElse(null);
+            for (ImagemProduto img : p.getImagens()){
+                Path path = Paths.get(UPLOAD_DIR + img.getNomeArquivo());
+                Files.deleteIfExists(path);
+                System.out.println("deletando: " + img.getNomeArquivo());
+            }
             produtoRepository.deleteById(id);
             redirectAttributes.addFlashAttribute("mensagemSucesso", "Produto deletado com sucesso!");
         } catch (Exception e) {
