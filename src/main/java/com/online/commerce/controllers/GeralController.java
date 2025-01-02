@@ -1,7 +1,8 @@
 package com.online.commerce.controllers;
 
-import com.online.commerce.auth.models.Produto;
-import com.online.commerce.auth.repositories.ProdutoRepository;
+import com.online.commerce.models.Produto;
+import com.online.commerce.repositories.ImagemProdutoRepository;
+import com.online.commerce.repositories.ProdutoRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,8 +17,13 @@ public class GeralController {
     @Autowired
     private ProdutoRepository produtoRepository;
 
+    @Autowired
+    private ImagemProdutoRepository imagemProdutoRepository;
+
     @GetMapping("/")
-    public String home() {
+    public String home(Model model) {
+        List<Produto> produtos = produtoRepository.findAll();
+        model.addAttribute("produtos", produtos);
         return "inicio";
     }
 

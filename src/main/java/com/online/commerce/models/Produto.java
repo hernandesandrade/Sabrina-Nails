@@ -1,4 +1,4 @@
-package com.online.commerce.auth.models;
+package com.online.commerce.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,10 +29,10 @@ public class Produto {
     private String descricao;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal preco;
+    private BigDecimal preco = BigDecimal.valueOf(0.0);
 
     @Column(precision = 10, scale = 2)
-    private BigDecimal precoDePor;
+    private BigDecimal precoDePor = BigDecimal.valueOf(0.0);
 
     @Column(nullable = false)
     private Integer estoque = 0;

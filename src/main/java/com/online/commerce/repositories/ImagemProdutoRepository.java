@@ -1,6 +1,6 @@
-package com.online.commerce.auth.repositories;
+package com.online.commerce.repositories;
 
-import com.online.commerce.auth.models.ImagemProduto;
+import com.online.commerce.models.ImagemProduto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

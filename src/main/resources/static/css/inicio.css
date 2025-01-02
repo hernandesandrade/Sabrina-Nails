@@ -1,8 +1,7 @@
 /* Body */
 .produto-img {
-    width: 100%;
+    object-fit: fill;
     height: 250px;
-    object-fit: cover;
 }
 
 /* Remover bordas arredondadas do botão */
@@ -17,13 +16,8 @@
     overflow: hidden;
 }
 
-.card-img-top {
-    height: 200px;
-    object-fit: cover;
-}
-
 .card-body {
-    padding: 1.5rem;
+    padding: 0.5rem 1.5rem;
     background-color: #fff;
     text-align: center;
 }
@@ -52,11 +46,11 @@
     max-width: 50%;
 }
 
-.product-tag {
+.oferta-tag {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: rgba(212, 175, 55, 0.9);
+    top: 7px;
+    left: 7px;
+    background-color: rgba(224, 89, 89, 0.80);
     color: #fff;
     font-size: 0.85rem;
     font-weight: bold;

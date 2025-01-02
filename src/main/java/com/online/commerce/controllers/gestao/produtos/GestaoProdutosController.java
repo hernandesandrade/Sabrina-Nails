@@ -1,20 +1,20 @@
 package com.online.commerce.controllers.gestao.produtos;
 
-import com.online.commerce.auth.models.ImagemProduto;
-import com.online.commerce.auth.models.Produto;
-import com.online.commerce.auth.repositories.ImagemProdutoRepository;
-import com.online.commerce.auth.repositories.ProdutoRepository;
-import com.online.commerce.services.ProdutoService;
+import com.online.commerce.models.ImagemProduto;
+import com.online.commerce.models.Produto;
+import com.online.commerce.repositories.ImagemProdutoRepository;
+import com.online.commerce.repositories.ProdutoRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,14 +22,10 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/gestao-produtos")
 public class GestaoProdutosController {
-
-    @Autowired
-    private ProdutoService produtoService;
 
     @Autowired
     private ProdutoRepository produtoRepository;
@@ -40,20 +36,47 @@ public class GestaoProdutosController {
     private static final String UPLOAD_DIR = "src/main/resources/static/upload/";
 
     @GetMapping("")
-    public String gestaoProdutos(@RequestParam(name = "pesquisa", required = false) String pesquisa, Model model, HttpServletRequest request){
-        List<Produto> produtos;
-        if (pesquisa != null && !pesquisa.trim().isEmpty()){
-            if (pesquisa.matches("\\d+")){
-                produtos = produtoRepository.findAllById(Long.parseLong(pesquisa));
-            }else{
-                produtos = produtoRepository.findByNomeContainingIgnoreCase(pesquisa);
-            }
-        }else {
-            produtos = produtoRepository.findAll(); // Caso contrário, busca todos os produtos
+    public String gestaoProdutos(@RequestParam(name = "pesquisa", required = false) String pesquisa, Model model, @RequestParam(defaultValue = "1") int pagina) {
+        // Se pesquisa não for nula ou vazia, realiza a busca com paginação
+        if (pesquisa != null && !pesquisa.trim().isEmpty()) {
+            listarProdutos(pagina, pesquisa, model); // Usa a paginação com pesquisa
+        } else {
+            listarProdutos(pagina, null, model); // Chama o listarProdutos sem filtro de pesquisa
         }
-        model.addAttribute("produtos", produtos);
-        model.addAttribute("pesquisa", pesquisa);
         return "gestao/produtos/gestaoProdutos";
+    }
+    public void listarProdutos(int pagina,
+                               String pesquisa, Model model) {
+        // Verifica se a página solicitada é menor que 1 (não pode ser 0 ou negativa)
+        int paginaCorrigida = Math.max(pagina - 1, 0);  // Subtrai 1 para ajustar com a lógica de Pageable
+
+        Pageable pageable = PageRequest.of(paginaCorrigida, 10); // 10 produtos por página
+        Page<Produto> produtosPage;
+        if (pesquisa != null && !pesquisa.trim().isEmpty()) {
+            if (pesquisa.matches("\\d+")){
+                produtosPage = produtoRepository.findAllById(Long.parseLong(pesquisa), pageable);
+            }else{
+                produtosPage = produtoRepository.findByNomeContainingIgnoreCase(pesquisa, pageable);
+            }
+        } else {
+            produtosPage = produtoRepository.findAll(pageable); // Caso não haja pesquisa, carrega todos os produtos com paginação
+        }
+
+        // Calcula o total de páginas de forma segura (não permite 0)
+        int totalPaginas = produtosPage.getTotalPages();
+        if (totalPaginas == 0) {
+            totalPaginas = 1; // Caso não haja nenhum resultado, tratamos como uma única página
+        }
+        int paginasExibidas = 3;
+        int startPage = Math.max(pagina - 1, 1); // Página inicial (página atual - 1)
+        int endPage = Math.min(startPage + paginasExibidas - 1, totalPaginas);
+
+        model.addAttribute("produtos", produtosPage.getContent());
+        model.addAttribute("paginaAtual", pagina);
+        model.addAttribute("totalPaginas", totalPaginas);
+        model.addAttribute("pesquisa", pesquisa);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
     }
 
     @GetMapping("/novo")
@@ -109,8 +132,10 @@ public class GestaoProdutosController {
         if (produto == null) {
             return "erroProdutoNaoEncontrado";  // Página de erro caso o produto não seja encontrado
         }
-        String formattedDate = produto.getCriadoEm().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        model.addAttribute("formattedDate", formattedDate);
+        String dataCriacao = produto.getCriadoEm().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String dataAtualizacao = produto.getAtualizadoEm().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        model.addAttribute("dataCriacao", dataCriacao);
+        model.addAttribute("dataAtualizacao", dataAtualizacao);
         model.addAttribute("produto", produto);
         return "gestao/produtos/detalhesProduto";  // Página que exibe os detalhes do produto
     }
@@ -213,7 +238,16 @@ public class GestaoProdutosController {
         return "redirect:/gestao-produtos/produto/" + produtoExistente.getId();
     }
 
-
+    @GetMapping("/deletar/{id}")
+    public String deletarProduto(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        try {
+            produtoRepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("mensagemSucesso", "Produto deletado com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Erro ao deletar o produto.");
+        }
+        return "redirect:/gestao-produtos";
+    }
 
 
 

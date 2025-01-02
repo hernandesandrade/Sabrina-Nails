@@ -6,8 +6,24 @@
 <div th:replace="~{fragmentos/header :: headerPequeno}"></div>
 
 <main class="bg-pastel py-5">
+  <div class="mb-4 container-buttons">
+    <a class="btn btn-dourado" href="/gestao-produtos">
+      <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+    <a class="btn btn-dourado" href="/gestao-produtos/novo">
+      <i class="fas fa-plus"></i> Novo
+    </a>
+    <a class="btn btn-dourado" th:href="@{/gestao-produtos/editar/{produtoId}(produtoId = ${produto.id})}">
+      <i class="fas fa-edit"></i> Editar
+    </a>
+    <button class="btn btn-dourado" data-bs-toggle="modal" data-bs-target="#confirmacaoExclusao"
+            th:data-produto-id="${produto.id}">
+      <i class="fas fa-trash-alt"></i> Deletar
+    </button>
+  </div>
+
   <div class="container-novo">
-    <h2 class="text-dourado mb-4">Detalhes do Produto</h2>
+    <h2 class="text-dourado mb-4" th:text="'Detalhes do Produto #' + ${produto.id}"></h2>
 
     <div class="mb-3">
       <label for="id" class="form-label">ID</label>
@@ -36,12 +52,12 @@
       <input type="number" class="form-control" id="estoque" th:value="${produto.estoque}" disabled>
     </div>
     <div class="mb-3">
-      <label for="dataCriacao" class="form-label">Data de Criação</label>
-      <input type="text" class="form-control" id="dataCriacao" th:value="${formattedDate}" disabled>
+      <label for="dataCriacao" class="form-label">Criado Em</label>
+      <input type="text" class="form-control" id="dataCriacao" th:value="${dataCriacao}" disabled>
     </div>
     <div class="mb-3">
-      <label for="dataUltimaAtualizacao" class="form-label">Data Última Atualização</label>
-      <input type="text" class="form-control" id="dataUltimaAtualizacao" th:value="${formattedDate}" disabled>
+      <label for="dataUltimaAtualizacao" class="form-label">Atualizado Em</label>
+      <input type="text" class="form-control" id="dataUltimaAtualizacao" th:value="${dataAtualizacao}" disabled>
     </div>
 
     <!-- Galeria de Imagens -->
@@ -51,13 +67,45 @@
         <img th:src="@{'/upload/' + ${imagem.nomeArquivo}}" alt="Imagem do produto" />
       </div>
     </div>
-
-    <a th:href="@{/gestao-produtos/editar/{produtoId}(produtoId = ${produto.id})}" class="btn">Editar</a>
   </div>
 </main>
-
+<div class="modal fade" id="confirmacaoExclusao" tabindex="-1" role="dialog" aria-labelledby="confirmacaoExclusaoLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmacaoExclusaoLabel">Confirmar Exclusão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        Deseja excluir este produto?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+        <a id="confirmarExclusao" class="btn btn-danger">Sim</a>
+      </div>
+    </div>
+  </div>
+</div>
 <footer th:replace="~{fragmentos/footer :: footer}"></footer>
 
 <script th:replace="~{fragmentos/bootStrap :: script}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var modal = new bootstrap.Modal(document.getElementById('confirmacaoExclusao'));
+
+    // Manipulador de evento para quando o botão Deletar for clicado
+    var deleteButtons = document.querySelectorAll('button[data-bs-toggle="modal"]');
+    deleteButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        var produtoId = this.getAttribute('data-produto-id');
+        var confirmarExclusao = document.getElementById("confirmarExclusao");
+        confirmarExclusao.href = `/gestao-produtos/deletar/${produtoId}`;
+
+        // Exibe o modal de confirmação
+        modal.show();
+      });
+    });
+  });
+</script>
 </body>
 </html>

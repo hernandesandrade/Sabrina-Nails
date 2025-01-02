@@ -1,4 +1,4 @@
-package com.online.commerce.auth.models;
+package com.online.commerce.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -18,7 +18,7 @@
             <div class="card position-relative">
               <div class="product-tag" th:text="${produto.nome}"></div>
               <!-- Imagem do Produto -->
-              <img href="#" class="card-img-top produto-img" alt="Produto">
+              <img th:if="${produto.imagens.size > 0}" th:src="@{'/upload/' + ${produto.imagens[0].nomeArquivo}}" class="card-img-top produto-img" alt="Esmalte Premium">
               <div class="card-body">
                 <h5 class="card-title text-truncate" th:text="${produto.nome}"></h5>
                 <p class="card-text" th:text="${produto.descricao}"></p>

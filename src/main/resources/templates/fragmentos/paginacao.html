@@ -1,0 +1,35 @@
+<nav aria-label="Página de produtos">
+  <ul th:fragment="paginas" class="pagination justify-content-center">
+    <!-- Página Anterior -->
+    <li class="page-item" th:classappend="${paginaAtual == 1} ? 'disabled'">
+      <a class="page-link" href="#" th:href="@{/gestao-produtos(pagina=1, pesquisa=${pesquisa})}" aria-label="Primeira">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li class="page-item" th:classappend="${paginaAtual == 1} ? 'disabled'">
+      <a class="page-link" href="#" th:href="@{/gestao-produtos(pagina=${paginaAtual - 1 > 0 ? paginaAtual - 1 : 1}, pesquisa=${pesquisa})}" aria-label="Anterior">
+        <span aria-hidden="true">&lsaquo;</span>
+      </a>
+    </li>
+
+    <!-- Páginas -->
+    <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}"
+        th:classappend="${i == paginaAtual} ? 'active'">
+      <a class="page-link" href="#" th:href="@{/gestao-produtos(pagina=${i}, pesquisa=${pesquisa})}" th:text="${i}"></a>
+    </li>
+
+    <!-- Página Próxima -->
+    <li class="page-item" th:classappend="${paginaAtual == totalPaginas} ? 'disabled'">
+      <a class="page-link" href="#" th:href="@{/gestao-produtos(pagina=${paginaAtual + 1 <= totalPaginas ? paginaAtual + 1 : totalPaginas}, pesquisa=${pesquisa})}" aria-label="Próxima">
+        <span aria-hidden="true">&rsaquo;</span>
+      </a>
+    </li>
+
+    <!-- Última Página -->
+    <li class="page-item" th:classappend="${paginaAtual == totalPaginas} ? 'disabled'">
+      <a class="page-link" href="#" th:href="@{/gestao-produtos(pagina=${totalPaginas}, pesquisa=${pesquisa})}" aria-label="Última">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>

@@ -1,3 +1,8 @@
+.container-buttons {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
 .container-novo {
     max-width: 800px;
     margin: 0 auto;

@@ -1,3 +1,7 @@
+h2 {
+    text-align: center;
+}
+
 .produtos-container {
     max-width: 800px;
     margin: 50px auto;
@@ -34,7 +38,7 @@
     border: 2px solid #d4af37;
 }
 
-.btn-primary, .btn-secondary, .btn-warning, .btn-danger, .btn-success {
+.btn-primary, .btn-warning, .btn-success {
     background-color: #d4af37;
     border-color: #d4af37;
 }
@@ -80,5 +84,90 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Melhorias gerais para responsividade */
+@media (max-width: 768px) {
+/* Ajustando o container principal para telas menores */
+    .produtos-container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    /* Ajustando o título */
+    .produtos-header h2 {
+        font-size: 24px;
+    }
+
+    /* Barra de pesquisa e botão adaptados */
+    .input-group {
+        flex-direction: column;
+    }
+
+    .input-group .form-control, .input-group-append .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    /* Botão "Novo Produto" adaptado */
+    .btn-dourado {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Ajustar a tabela para telas menores */
+    .table {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+    }
+
+    .table th, .table td {
+        word-wrap: break-word;
+        white-space: normal;
+    }
+
+    /* Ajustando a galeria */
+    .galeria-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+
+    .galeria-item {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* Ajustes para telas pequenas (como celulares) */
+@media (max-width: 480px) {
+    .produtos-container {
+        padding: 10px;
+    }
+
+    /* Ajuste no tamanho da tabela e visualização */
+    .table {
+        font-size: 12px;
+    }
+
+    .table th, .table td {
+        padding: 5px;
+    }
+
+    /* Ajustar botão para dispositivos móveis */
+    .btn {
+        width: 100%;
+        text-align: center;
+        padding: 12px 0;
+    }
+
+    /* Modificar o layout da barra de pesquisa */
+    .input-group {
+        flex-direction: column;
+    }
+
+    .input-group .form-control {
+        margin-bottom: 10px;
+    }
 }
 

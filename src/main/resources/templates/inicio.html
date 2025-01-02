@@ -44,46 +44,23 @@
             <h2 class="text-center text-dourado">Produtos e Serviços em Oferta</h2>
             <div class="row">
                 <!-- Produto 1 -->
-                <div class="col-lg-3 col-sm-6 mb-4">
+                <div th:if="${produto.precoDePor} > 0" th:each="produto : ${produtos}" class="col-lg-3 col-sm-6 mb-4">
                     <div class="card position-relative">
-                        <div class="product-tag">Produto</div>
-                        <img src="https://via.placeholder.com/250" class="card-img-top produto-img" alt="Esmalte Premium">
+                        <div class="oferta-tag" th:text="${((produto.precoDePor - produto.preco) * 100 / produto.preco).intValue()} + '% OFF'">Produto</div>
+                        <img th:if="${produto.imagens.size > 0}" th:src="@{'/upload/' + ${produto.imagens[0].nomeArquivo}}" class="produto-img" alt="Esmalte Premium">
                         <div class="card-body">
-                            <h5 class="card-title text-truncate">Esmalte Premium Extra Brilho e Longa Duração</h5>
+                            <h5 th:text="${produto.nome}" class="card-title text-truncate" th:title="${produto.nome}">Esmalte Premium Extra Brilho e Longa Duração</h5>
                             <div class="price-container">
-                                <span class="discounted-price">R$ 15,00</span>
-                                <span class="original-price">R$ 20,00</span>
+                                <div th:if="${produto.precoDePor > 0}">
+                                    <span class="discounted-price" th:text="'R$' + ${produto.precoDePor}">R$ ???</span>
+                                    <span class="original-price" th:text="'R$' + ${produto.preco}">R$ ???</span>
+                                </div>
+                                <div th:if="${produto.precoDePor <= 0}">
+                                    <span class="discounted-price" th:text="'R$' + ${produto.preco}">R$ ???</span>
+                                </div>
                             </div>
-                            <button class="btn btn-dourado w-100">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Produto 2 -->
-                <div class="col-lg-3 col-sm-6 mb-4">
-                    <div class="card position-relative">
-                        <div class="product-tag">Produto</div>
-                        <img src="https://via.placeholder.com/250" class="card-img-top produto-img" alt="Kit Manicure">
-                        <div class="card-body">
-                            <h5 class="card-title text-truncate">Kit Manicure Completo com Ferramentas Profissionais</h5>
-                            <div class="price-container">
-                                <span class="discounted-price">R$ 90,00</span>
-                                <span class="original-price">R$ 120,00</span>
-                            </div>
-                            <button class="btn btn-dourado w-100">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Produto 3 -->
-                <div class="col-lg-3 col-sm-6 mb-4">
-                    <div class="card position-relative">
-                        <div class="product-tag">Serviço</div>
-                        <img src="https://via.placeholder.com/250" class="card-img-top produto-img" alt="Hidratação Especial">
-                        <div class="card-body">
-                            <h5 class="card-title text-truncate">Hidratação Especial para Cabelos Danificados</h5>
-                            <div class="price-container">
-                                <span class="fixed-price">R$ 50,00</span>
-                            </div>
-                            <button class="btn btn-dourado w-100">Agendar Serviço</button>
+                            <button class="mb-2 btn btn-dourado">Adicionar ao Carrinho</button>
+                            <a class="text-center btn" href="#">Informações</a>
                         </div>
                     </div>
                 </div>
