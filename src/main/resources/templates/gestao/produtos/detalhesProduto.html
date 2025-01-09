@@ -25,9 +25,15 @@
   <div class="container-novo">
     <h2 class="text-dourado mb-4" th:text="'Detalhes do Produto #' + ${produto.id}"></h2>
 
-    <div class="mb-3">
-      <label for="id" class="form-label">ID</label>
-      <input type="text" class="form-control" id="id" th:value="${produto.id}" disabled>
+    <div class="row mb-3">
+      <div class="col">
+        <label for="id" class="form-label">ID</label>
+        <input type="text" class="form-control" id="id" th:value="${produto.id}" disabled>
+      </div>
+      <div class="col">
+        <label for="id" class="form-label">Código de Barras</label>
+        <input type="text" class="form-control" id="codigoBarras" th:value="${produto.codigoBarras}" disabled>
+      </div>
     </div>
     <div class="mb-3">
       <label for="nome" class="form-label">Nome</label>

@@ -102,3 +102,34 @@
     color: #333;
     font-weight: bold;
 }
+
+.btn-zap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Espaço entre ícone e texto */
+    background-color: #25d366; /* Verde característico do WhatsApp */
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px; /* Bordas arredondadas */
+    text-decoration: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-zap:hover {
+    background-color: #1da851; /* Tom mais escuro para hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra no hover */
+}
+
+.btn-zap:active {
+    background-color: #1b9a47; /* Tom ainda mais escuro para clique */
+}
+
+.btn-zap svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor; /* Para herdar a cor do texto */
+}

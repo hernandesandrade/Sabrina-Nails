@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Sabrina Art & Nails', '/css/produto.css')}"></head>
+<body>
+
+<header th:replace="~{fragmentos/header :: headerGrande}"></header>
+
+<main class="produto-detalhes-container">
+    <div class="produto-detalhes">
+        <div class="imagem-secao">
+            <div class="imagem-principal">
+                <img th:src="@{'/upload/' + ${produto.imagens[0].nomeArquivo}}" alt="Imagem do Produto">
+            </div>
+            <div class="miniaturas">
+                <img th:each="imagem : ${produto.imagens}" th:src="@{'/upload/' + ${imagem.nomeArquivo}}"
+                     alt="Imagem Miniatura" class="miniatura"
+                     th:onclick="|document.querySelector('.imagem-principal img').src='@{'/upload/' + ${imagem.nomeArquivo}}'|">
+            </div>
+        </div>
+        <div class="informacoes-secao">
+            <h1 th:text="${produto.nome}">Nome do Produto</h1>
+            <div class="precos">
+                <span class="preco-antigo" th:if="${produto.precoDePor > 0}"
+                      th:text="'R$ ' + ${#strings.replace(produto.preco.toString(), '.', ',')}">R$ ???</span>
+                <span class="preco-novo" th:text="'R$ ' + ${#strings.replace(produto.precoDePor.toString(), '.', ',')}">R$ ???</span>
+            </div>
+            <div class="descricao">
+                <h3>Descrição</h3>
+                <p th:text="${produto.descricao}">Descrição detalhada do produto.</p>
+                <p th:text="'Código de barras: ' + ${produto.codigoBarras}">Codigo de barras</p>
+            </div>
+            <a th:href="'https://wa.me/5513981551894?text=Olá,%20estou%20interessado%20em%20' + ${produto.nome} "
+               class="btn btn-zap" target="_blank" rel="noopener noreferrer">
+                Conversar no WhatsApp
+            </a>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragmentos/footer :: footer}"></footer>
+
+</body>
+</html>

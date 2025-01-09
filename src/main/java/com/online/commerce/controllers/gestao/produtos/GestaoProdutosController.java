@@ -55,6 +55,7 @@ public class GestaoProdutosController {
         if (pesquisa != null && !pesquisa.trim().isEmpty()) {
             if (pesquisa.matches("\\d+")){
                 produtosPage = produtoRepository.findAllById(Long.parseLong(pesquisa), pageable);
+                
             }else{
                 produtosPage = produtoRepository.findByNomeContainingIgnoreCase(pesquisa, pageable);
             }
@@ -242,10 +243,12 @@ public class GestaoProdutosController {
     public String deletarProduto(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             Produto p = produtoRepository.findById(id).orElse(null);
-            for (ImagemProduto img : p.getImagens()){
-                Path path = Paths.get(UPLOAD_DIR + img.getNomeArquivo());
-                Files.deleteIfExists(path);
-                System.out.println("deletando: " + img.getNomeArquivo());
+            if (p != null && !p.getImagens().isEmpty()) {
+                for (ImagemProduto img : p.getImagens()) {
+                    Path path = Paths.get(UPLOAD_DIR + img.getNomeArquivo());
+                    Files.deleteIfExists(path);
+                    System.out.println("deletando: " + img.getNomeArquivo());
+                }
             }
             produtoRepository.deleteById(id);
             redirectAttributes.addFlashAttribute("mensagemSucesso", "Produto deletado com sucesso!");

@@ -19,7 +19,8 @@
                             <img src="img/banner-produtos.webp" class="card-img-top" alt="Produtos">
                             <div class="card-body">
                                 <h5 class="card-title text-dourado">Produtos</h5>
-                                <p class="card-text">Descubra nossa linha de esmaltes, cuidados e acessórios para suas unhas.</p>
+                                <p class="card-text">Descubra nossa linha de esmaltes, cuidados e acessórios para suas
+                                    unhas.</p>
                                 <a href="#produtos" class="btn btn-dourado">Ver Produtos</a>
                             </div>
                         </div>
@@ -41,26 +42,39 @@
 
         <!-- Seção de Ofertas -->
         <section id="ofertas" class="mb-5">
-            <h2 class="text-center text-dourado">Produtos e Serviços em Oferta</h2>
+            <h2 class="text-center text-dourado">Ofertas Especiais</h2>
             <div class="row">
                 <!-- Produto 1 -->
-                <div th:if="${produto.precoDePor} > 0" th:each="produto : ${produtos}" class="col-lg-3 col-sm-6 mb-4">
+                <div th:if="${produto.precoDePor > 0} and ${produto.precoDePor < produto.preco} and ${produto.imagens.size > 0}"
+                     th:each="produto : ${produtos}" class="col-lg-3 col-sm-6 mb-4">
                     <div class="card position-relative">
-                        <div class="oferta-tag" th:text="${((produto.precoDePor - produto.preco) * 100 / produto.preco).intValue()} + '% OFF'">Produto</div>
-                        <img th:if="${produto.imagens.size > 0}" th:src="@{'/upload/' + ${produto.imagens[0].nomeArquivo}}" class="produto-img" alt="Esmalte Premium">
+                        <div class="oferta-tag"
+                             th:text="${((produto.precoDePor - produto.preco) * 100 / produto.preco).intValue()} + '% OFF'">
+                            Produto
+                        </div>
+                        <img th:src="@{'/upload/' + ${produto.imagens[0].nomeArquivo}}" class="produto-img"
+                             alt="Esmalte Premium">
                         <div class="card-body">
-                            <h5 th:text="${produto.nome}" class="card-title text-truncate" th:title="${produto.nome}">Esmalte Premium Extra Brilho e Longa Duração</h5>
+                            <h5 th:text="${produto.nome}" class="card-title text-truncate" th:title="${produto.nome}"></h5>
                             <div class="price-container">
                                 <div th:if="${produto.precoDePor > 0}">
-                                    <span class="discounted-price" th:text="'R$' + ${produto.precoDePor}">R$ ???</span>
-                                    <span class="original-price" th:text="'R$' + ${produto.preco}">R$ ???</span>
-                                </div>
-                                <div th:if="${produto.precoDePor <= 0}">
-                                    <span class="discounted-price" th:text="'R$' + ${produto.preco}">R$ ???</span>
+                                    <span class="discounted-price"
+                                          th:text="'R$ ' + ${#strings.replace(produto.precoDePor.toString(), '.', ',')}">R$ ???</span>
+
+                                    <span class="original-price"
+                                          th:text="'R$ ' + ${#strings.replace(produto.preco.toString(), '.', ',')}">R$ ???</span>
                                 </div>
                             </div>
-                            <button class="mb-2 btn btn-dourado">Adicionar ao Carrinho</button>
-                            <a class="text-center btn" href="#">Informações</a>
+                            <a href="https://wa.me/5513981551894?text=Olá,%20venho%20através%20do%20seu%20site.%20Pode%20me%20ajudar?"
+                               class="mb-2 btn btn-zap" target="_blank" rel="noopener noreferrer">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+                                     fill="#25D366">
+                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 2.09.54 4.15 1.57 6L0 24l6.02-1.58A12.019 12.019 0 0012 24c6.63 0 12-5.37 12-12S18.63 0 12 0zm0 22c-1.73 0-3.42-.44-4.92-1.27L6.3 20.96 4.93 21.4l.8-2.94-1.12-1.75A9.977 9.977 0 012 12c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10z"/>
+                                    <path d="M17.4 14.09c-.27-.14-1.6-.79-1.84-.88-.24-.1-.41-.14-.59.14-.17.28-.67.88-.82 1.06-.14.18-.3.2-.55.07-.27-.14-1.14-.42-2.17-1.34-.8-.71-1.34-1.59-1.5-1.86-.16-.27-.02-.42.12-.56.13-.13.28-.33.41-.49.14-.17.18-.28.28-.47.1-.18.05-.35-.02-.49-.07-.14-.59-1.43-.81-1.97-.21-.5-.42-.43-.59-.43h-.5c-.18 0-.46.06-.7.28-.23.22-.93.91-.93 2.22 0 1.3.95 2.55 1.08 2.73.13.18 1.88 2.88 4.57 4.04.64.28 1.14.45 1.53.58.64.2 1.22.17 1.68.1.51-.07 1.6-.65 1.83-1.27.23-.62.23-1.15.17-1.27-.05-.14-.24-.2-.5-.34z"/>
+                                </svg>
+                                Conversar no WhatsApp
+                            </a>
+                            <a class="text-center btn" th:href="@{'/produto/' + ${produto.id}}">Ver Informações</a>
                         </div>
                     </div>
                 </div>

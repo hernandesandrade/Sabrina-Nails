@@ -39,6 +39,7 @@
           <thead>
           <tr>
             <th scope="col">ID</th>
+            <th scope="col">Cód. Barras</th>
             <th scope="col">Nome</th>
             <th scope="col">Preço</th>
             <th scope="col">Preço DePor</th>
@@ -51,10 +52,11 @@
           <tbody>
           <tr th:each="produto : ${produtos}">
             <th class="col-1" scope="row" th:text="${produto.id}">ID</th>
+            <td class="col-2" th:text="${produto.codigoBarras}">Código de Barras</td>
             <td class="col-4" th:text="${produto.nome}">Nome do Produto</td>
             <td class="col-2" th:text="${produto.preco}">Preço</td>
             <td class="col-2" th:text="${produto.precoDePor}">Preço DePor</td>
-            <td class="col-2" th:text="${produto.estoque}">Estoque</td>
+            <td class="col-1" th:text="${produto.estoque}">Estoque</td>
             <td class="col-1">
               <a th:href="@{/gestao-produtos/produto/{produtoId}(produtoId = ${produto.id})}" class="btn">Detalhes</a>
             </td>
