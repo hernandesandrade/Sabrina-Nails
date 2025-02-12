@@ -17,7 +17,11 @@ public class ProdutoController {
     @GetMapping("/produto/{id}")
     public String produto(@PathVariable("id") long id, Model model){
         Produto p = produtoRepository.findById(id).orElse(null);
+        assert p != null;
+        //redirecionar pra pagina de erro depois
+        String descricao = p.getDescricao().replace("\n", "<br>");
         model.addAttribute("produto", p);
+        model.addAttribute("descricao", descricao);
         return "produto";
     }
 

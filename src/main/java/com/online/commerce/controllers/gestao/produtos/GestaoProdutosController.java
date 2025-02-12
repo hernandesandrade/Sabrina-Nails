@@ -6,19 +6,23 @@ import com.online.commerce.repositories.ImagemProdutoRepository;
 import com.online.commerce.repositories.ProdutoRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -54,8 +58,11 @@ public class GestaoProdutosController {
         Page<Produto> produtosPage;
         if (pesquisa != null && !pesquisa.trim().isEmpty()) {
             if (pesquisa.matches("\\d+")){
-                produtosPage = produtoRepository.findAllById(Long.parseLong(pesquisa), pageable);
-                
+                if (isValidEAN13(pesquisa)){
+                    produtosPage = produtoRepository.findAllByCodigoBarras(pesquisa, pageable);
+                }else{
+                    produtosPage = produtoRepository.findAllById(Long.parseLong(pesquisa), pageable);
+                }
             }else{
                 produtosPage = produtoRepository.findByNomeContainingIgnoreCase(pesquisa, pageable);
             }
@@ -89,6 +96,10 @@ public class GestaoProdutosController {
     @PostMapping("/salvar")
     public String salvarProduto(@RequestParam("fotos") MultipartFile[] fotos, Produto produto, RedirectAttributes redirectAttributes) {
         try {
+            if (produtoRepository.existsByCodigoBarras(produto.getCodigoBarras())){
+                System.out.println("Ja existe um produto com esse codigo de barras.");
+                return "redirect:/gestao-produtos/novo";
+            }
             // Salvar o produto no banco de dados
             produtoRepository.save(produto);
 
@@ -174,12 +185,13 @@ public class GestaoProdutosController {
             redirectAttributes.addFlashAttribute("message", "Produto não encontrado!");
             return "redirect:/gestao-produtos";
         }
-
         // Atualizar as informações do produto (nome, descrição, preço, etc.)
         produtoExistente.setNome(produto.getNome());
         produtoExistente.setDescricao(produto.getDescricao());
-        produtoExistente.setPreco(produto.getPreco());
-        produtoExistente.setPrecoDePor(produto.getPrecoDePor());
+        System.out.println(formatarPreco(produto.getPreco()));
+        System.out.println(produtoExistente.getPreco());
+        produtoExistente.setPreco(formatarPreco(produto.getPreco()));
+        produtoExistente.setPrecoDePor(formatarPreco(produto.getPrecoDePor()));
         produtoExistente.setAtualizadoEm(LocalDateTime.now());
 
         // Salvar o produto atualizado
@@ -258,7 +270,40 @@ public class GestaoProdutosController {
         return "redirect:/gestao-produtos";
     }
 
+    public boolean isValidEAN13(String codigoBarras) {
+        if (codigoBarras == null || codigoBarras.length() != 13) {
+            return false;
+        }
 
+        try {
+            int sum = 0;
+            for (int i = 0; i < 12; i++) {
+                int digit = Character.getNumericValue(codigoBarras.charAt(i));
+                sum += (i % 2 == 0) ? digit : digit * 3;
+            }
+            int checkDigit = 10 - (sum % 10);
+            if (checkDigit == 10) checkDigit = 0;
+
+            return checkDigit == Character.getNumericValue(codigoBarras.charAt(12));
+        } catch (NumberFormatException e) {
+            return false; // Não é numérico.
+        }
+    }
+
+    private BigDecimal formatarPreco(BigDecimal precoString) {
+        // Remove todos os caracteres não numéricos
+        String preco = precoString.toString().replaceAll("\\D", "");
+
+        // Garante que o valor tem pelo menos 2 dígitos
+        if (preco.length() <= 2) {
+            preco = "0" + preco;
+        }
+
+        // Insere o ponto antes dos dois últimos dígitos
+        preco = preco.substring(0, preco.length() - 2) + "." + preco.substring(preco.length() - 2);
+
+        return new BigDecimal(preco);
+    }
 
 
 }
