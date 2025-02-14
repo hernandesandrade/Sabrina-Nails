@@ -1,4 +1,8 @@
 /* Header */
+header {
+    border-bottom: 1px solid #d4af37;
+}
+
 .logo {
     font-family: 'Cursive', sans-serif;
     font-size: 1.8rem;

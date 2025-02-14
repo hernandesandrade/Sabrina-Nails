@@ -96,6 +96,10 @@ public class GestaoProdutosController {
     @PostMapping("/salvar")
     public String salvarProduto(@RequestParam("fotos") MultipartFile[] fotos, Produto produto, RedirectAttributes redirectAttributes) {
         try {
+            if (!isValidEAN13(produto.getCodigoBarras())){
+                System.out.println("Esse nao é um codigo de barras valido.");
+                return "redirect:/gestao-produtos/novo";
+            }
             if (produtoRepository.existsByCodigoBarras(produto.getCodigoBarras())){
                 System.out.println("Ja existe um produto com esse codigo de barras.");
                 return "redirect:/gestao-produtos/novo";
