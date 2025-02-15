@@ -31,17 +31,50 @@
                     <span class="discounted-price" th:text="${produto.preco}"></span>
                   </div>
                 </div>
-                <button class="btn btn-dourado w-100">Adicionar ao Carrinho</button>
+                <!-- Botão Adicionar ao Carrinho -->
+                <button class="btn btn-dourado w-100 adicionar-carrinho"
+                        th:data-produto-id="${produto.id}">
+                  Adicionar ao Carrinho
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- Mensagem de Sucesso -->
+    <div id="mensagem-sucesso" class="alert alert-success text-center" style="display: none;">
+      Produto adicionado ao carrinho com sucesso!
+    </div>
+
   </div>
 </main>
 
 <footer th:replace="~{fragmentos/footer :: footer}"></footer>
 <script th:replace="~{fragmentos/bootStrap :: script}"></script>
+
+<!-- Script para adicionar ao carrinho via AJAX -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".adicionar-carrinho").forEach(button => {
+      button.addEventListener("click", function () {
+        let produtoId = this.getAttribute("data-produto-id");
+
+        fetch("/carrinho/adicionar?produtoId=" + produtoId + "&quantidade=1", {
+          method: "POST"
+        }).then(response => {
+          if (response.ok) {
+            document.getElementById("mensagem-sucesso").style.display = "block";
+            setTimeout(() => {
+              document.getElementById("mensagem-sucesso").style.display = "none";
+            }, 2000);
+          }
+        }).catch(error => console.error("Erro ao adicionar ao carrinho:", error));
+      });
+    });
+  });
+</script>
+
 </body>
 </html>
