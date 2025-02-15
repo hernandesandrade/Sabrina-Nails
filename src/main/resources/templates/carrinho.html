@@ -1,26 +1,75 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <title>Carrinho de Compras</title>
-</head>
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Sabrina Art & Nails', '/css/carrinho.css')}"></head>
 <body>
-<h2>Seu Carrinho</h2>
-<table>
-  <tr>
-    <th>Produto</th>
-    <th>Quantidade</th>
-    <th>Preço</th>
-    <th>Ações</th>
-  </tr>
-  <tr th:each="item : ${carrinho.itens}">
-    <td th:text="${item.produto.nome}"></td>
-    <td th:text="${item.quantidade}"></td>
-    <td th:text="${item.produto.preco * item.quantidade}"></td>
-    <td>
-      <a th:href="@{/carrinho/remover(produtoId=${item.produto.id})}">Remover</a>
-    </td>
-  </tr>
-</table>
-<a href="/produtos">Continuar Comprando</a>
+<header th:replace="~{fragmentos/header :: headerGrande}"></header>
+<div th:replace="~{fragmentos/header :: headerPequeno}"></div>
+<main class="bg-pastel py-5">
+  <div class="carrinho-container">
+    <div class="carrinho-header">
+      <h2>Carrinho de Compras</h2>
+    </div>
+    <div th:each="item : ${item}" class="carrinho-itens">
+      <div class="carrinho-item">
+        <div class="item-imagem">
+          <a th:href="@{/produto/{id}(id=${item.produto.id})}">
+            <img th:if="${item.produto.imagens.size > 0}"
+                 th:src="@{'/upload/' + ${item.produto.imagens[0].nomeArquivo}}"
+                 alt="Imagem do Produto">
+          </a>
+        </div>
+        <div class="item-detalhes">
+          <h3>
+            <a th:href="@{/produto/{id}(id=${item.produto.id})}" th:text="${item.produto.nome}"></a>
+          </h3>
+        </div>
+        <div class="item-quantidade-total">
+          <p>
+          <div class="quantidade-container">
+            <button type="button" class="btn-quantidade" onclick="alterarQuantidade(this, -1)">−</button>
+            <input type="number"
+                   class="quantidade-input"
+                   th:value="${item.quantidade}"
+                   th:data-id="${item.produto.id}"
+                   min="1"
+                   th:max="${item.produto.estoque}"
+                   readonly>
+            <button type="button" class="btn-quantidade" onclick="alterarQuantidade(this, 1)">+</button>
+          </div>
+          </p>
+          <p><span class="total-item" th:text="'R$ ' + ${#numbers.formatDecimal(item.produto.preco * item.quantidade, 1, 2)}"></span></p>
+        </div>
+        <div class="item-preco">
+          <p><span th:text="'R$ ' + ${#numbers.formatDecimal(item.produto.preco, 1, 2)}"></span></p>
+        </div>
+        <div class="item-remover">
+          <button class="btn btn-danger">Remover</button>
+        </div>
+      </div>
+    </div>
+    <div class="carrinho-total">
+      <h3 th:text="'SubTotal: R$ ' + ${total}"></h3>
+    </div>
+    <div class="carrinho-acoes">
+      <a href="produtos" class="btn btn-primary">Continuar Comprando</a>
+      <button class="btn btn-success">Finalizar Compra</button>
+    </div>
+  </div>
+</main>
+<footer th:replace="~{fragmentos/footer :: footer}"></footer>
+<script th:replace="~{fragmentos/bootStrap :: script}"></script>
+<script>
+  function alterarQuantidade(botao, delta) {
+  let container = botao.parentElement;
+  let input = container.querySelector(".quantidade-input");
+  let novaQuantidade = parseInt(input.value) + delta;
+  let max = parseInt(input.getAttribute("max"));
+  let min = parseInt(input.getAttribute("min"));
+
+  if (novaQuantidade >= min && novaQuantidade <= max) {
+    input.value = novaQuantidade;
+  }
+}
+</script>
 </body>
 </html>

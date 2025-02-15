@@ -61,19 +61,17 @@ public class ProdutoService {
         }
     }
 
-    public String salvarProduto(MultipartFile[] fotos, Produto produto) {
-        return salvarProduto(fotos, produto, "");
-    }
-
-    public String salvarProduto(MultipartFile[] fotos, Produto produto, String imagensExcluidas) {
+    public String salvarNovoProduto(MultipartFile[] fotos, Produto produto) {
         if (!isValidEAN13(produto.getCodigoBarras())) {
             return "Esse nao é um codigo de barras valido.";
         }
         if (produtoRepository.existsByCodigoBarras(produto.getCodigoBarras())) {
-            if (!getProduto(produto.getCodigoBarras()).getId().equals(produto.getId())){
-                return "Ja existe um produto com esse codigo de barras.";
-            }
+            return "Ja existe um produto com esse codigo de barras.";
         }
+        return salvarProduto(fotos, produto, "");
+    }
+
+    public String salvarProduto(MultipartFile[] fotos, Produto produto, String imagensExcluidas) {
         produtoRepository.save(produto);
         List<String> listImagesFails = imagemProdutoService.salvarImagens(produto, fotos, imagensExcluidas);
         if (!listImagesFails.isEmpty()) {
