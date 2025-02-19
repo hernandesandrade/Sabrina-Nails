@@ -34,8 +34,9 @@ public class ProdutoService {
         return produtoRepository.findById(id).orElse(null);
     }
 
-    public Produto getProduto(String codigoBarras){
-        return produtoRepository.findByCodigoBarras(codigoBarras);
+    public Produto getProduto(String codigo) {
+        return produtoRepository.findByCodigoBarras(codigo);
+
     }
 
     public List<ImagemProduto> getImagens(Produto produto) {
@@ -61,6 +62,10 @@ public class ProdutoService {
         }
     }
 
+    public void salvarProduto(Produto produto) {
+        produtoRepository.save(produto);
+    }
+
     public String salvarProduto(MultipartFile[] fotos, Produto produto) {
         return salvarProduto(fotos, produto, "");
     }
@@ -70,7 +75,7 @@ public class ProdutoService {
             return "Esse nao é um codigo de barras valido.";
         }
         if (produtoRepository.existsByCodigoBarras(produto.getCodigoBarras())) {
-            if (!getProduto(produto.getCodigoBarras()).getId().equals(produto.getId())){
+            if (!getProduto(produto.getCodigoBarras()).getId().equals(produto.getId())) {
                 return "Ja existe um produto com esse codigo de barras.";
             }
         }
@@ -85,8 +90,8 @@ public class ProdutoService {
     public String deletar(Long id) {
         produtoRepository.deleteById(id);
         List<ImagemProduto> imagens = imagemProdutoService.getImagens(id);
-        if (!imagens.isEmpty()){
-            for (ImagemProduto img : imagens){
+        if (!imagens.isEmpty()) {
+            for (ImagemProduto img : imagens) {
                 try {
                     Path path = Paths.get(UPLOAD_DIR + img.getNomeArquivo());
                     Files.deleteIfExists(path);
@@ -96,6 +101,30 @@ public class ProdutoService {
             }
         }
         return "produto excluido com sucesso.";
+    }
+
+    public void adicionarEstoque(Produto produto, int quantidade) {
+        if (produto != null && quantidade > 0) {
+            produto.setEstoque(produto.getEstoque() + quantidade);
+            produtoRepository.save(produto);  // Salva o produto com a nova quantidade no banco de dados
+        } else {
+            throw new IllegalArgumentException("Produto ou quantidade inválidos");
+        }
+    }
+
+    // Método para remover estoque
+    public void removerEstoque(Produto produto, int quantidade) {
+        if (produto != null && quantidade > 0) {
+            // Verifica se há quantidade suficiente no estoque
+            if (produto.getEstoque() >= quantidade) {
+                produto.setEstoque(produto.getEstoque() - quantidade);
+                produtoRepository.save(produto);  // Salva o produto com a quantidade atualizada
+            } else {
+                throw new IllegalArgumentException("Estoque insuficiente para a operação");
+            }
+        } else {
+            throw new IllegalArgumentException("Produto ou quantidade inválidos");
+        }
     }
 
     private boolean isValidEAN13(String codigoBarras) {

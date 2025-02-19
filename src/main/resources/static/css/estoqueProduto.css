@@ -1,0 +1,130 @@
+/* Cores */
+:root {
+    --cor-fundo: #fde4e4;
+    --cor-destaque: #d4af37;
+    --cor-texto: #333;
+    --cor-branco: #fff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+}
+
+header {
+    background-color: var(--cor-destaque);
+    color: var(--cor-branco);
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+main {
+    padding: 20px;
+}
+
+h2 {
+    color: var(--cor-destaque);
+    margin-bottom: 10px;
+}
+
+.form-section {
+    background-color: var(--cor-branco);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input[type="text"], input[type="number"], textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 48%;
+}
+
+.entrada {
+    background-color: #4CAF50; /* Verde para entrada */
+    color: var(--cor-branco);
+}
+
+.saida {
+    background-color: #f44336; /* Vermelho para saída */
+    color: var(--cor-branco);
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.table-section {
+    background-color: var(--cor-branco);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: var(--cor-destaque);
+    color: var(--cor-branco);
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: var(--cor-destaque);
+    color: var(--cor-branco);
+    margin-top: 30px;
+}

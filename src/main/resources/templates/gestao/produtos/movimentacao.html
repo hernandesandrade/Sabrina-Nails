@@ -1,0 +1,102 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Movimentação de Estoque', '/css/novoProduto.css')}"></head>
+<body>
+<header th:replace="~{fragmentos/header :: headerGrande}"></header>
+<div th:replace="~{fragmentos/header :: headerPequeno}"></div>
+
+<main class="bg-pastel py-5">
+    <div class="container-novo">
+        <h2 class="text-dourado mb-4">Movimentação de Estoque</h2>
+        <form th:object="${movimentacao}" action="/movimentacao/processar" method="post">
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="codigo" class="form-label">Código</label>
+                    <input th:field="*{produto.codigoBarras}" type="text" class="form-control" id="codigo" name="codigo">
+                </div>
+                <div class="col">
+                    <label for="id" class="form-label">ID</label>
+                    <input th:field="*{produto.id}" type="text" class="form-control" id="id" name="id" disabled>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="descricao" name="descricao" disabled>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="quantidade" class="form-label">Quantidade</label>
+                    <input th:field="*{quantidade}" type="number" class="form-control" id="quantidade" name="quantidade" min="1" value="1" required>
+                </div>
+                <div class="col">
+                    <label for="tipoMovimentacao" class="form-label">Tipo de Movimentação</label>
+                    <select th:field="*{movimento}" class="form-control" id="tipoMovimentacao" name="tipoMovimentacao" required onchange="toggleMotivo()">
+                        <option th:value="true" th:text="'Entrada'"></option>
+                        <option th:value="false" th:text="'Saída'"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3" id="motivoContainer">
+                <label for="motivo" class="form-label">Motivo</label>
+                <input type="text" class="form-control" id="motivo" name="motivo">
+            </div>
+            <button type="submit" class="btn btn-dourado mt-4">Confirmar Movimentação</button>
+            <div th:if="${mensagem}" class="alert alert-info mt-3" th:text="${mensagem}"></div>
+        </form>
+    </div>
+</main>
+
+<footer th:replace="~{fragmentos/footer :: footer}"></footer>
+<script th:replace="~{fragmentos/bootStrap :: script}"></script>
+
+<script>
+    function toggleMotivo() {
+        var tipoMovimentacao = document.getElementById("tipoMovimentacao").value;
+        var motivoContainer = document.getElementById("motivoContainer");
+
+        if (tipoMovimentacao === "true") {  // Comparação com string "true"
+            motivoContainer.style.display = "none";
+        } else {
+            motivoContainer.style.display = "block";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        toggleMotivo();
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("codigo").addEventListener("change", buscarProduto);
+        document.getElementById("codigo").addEventListener("keydown", function(event) {
+            if (event.key === "Enter" || event.key === "Tab") {
+                event.preventDefault();
+                buscarProduto();
+            }
+        });
+    });
+
+    function buscarProduto() {
+        let codigo = document.getElementById("codigo").value.trim();
+        if (codigo === "") return;
+
+        fetch(`/movimentacao/produto/${codigo}`)
+            .then(response => {
+            if (!response.ok) {
+                throw new Error("Produto não encontrado");
+            }
+            return response.json();
+        })
+            .then(produto => {
+            document.getElementById("id").value = produto.id;
+            document.getElementById("descricao").value = produto.nome;
+        })
+            .catch(error => {
+            alert(error.message);
+        });
+    }
+</script>
+
+
+</body>
+</html>

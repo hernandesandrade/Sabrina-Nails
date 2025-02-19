@@ -1,7 +1,6 @@
 package com.online.commerce.controllers;
 
 import com.online.commerce.models.Produto;
-import com.online.commerce.repositories.ProdutoRepository;
 import com.online.commerce.services.CarrinhoService;
 import com.online.commerce.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;

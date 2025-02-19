@@ -1,5 +1,6 @@
 package com.online.commerce.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,6 +47,7 @@ public class Produto {
     @Column(nullable = false)
     private LocalDateTime atualizadoEm = LocalDateTime.now();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImagemProduto> imagens;
 
