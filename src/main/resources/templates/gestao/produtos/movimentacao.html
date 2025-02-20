@@ -40,11 +40,38 @@
             </div>
             <div class="mb-3" id="motivoContainer">
                 <label for="motivo" class="form-label">Motivo</label>
-                <input th:field="*{motivo}" type="text" class="form-control" id="motivo" name="motivo">
+                <input th:field="*{motivo}" type="text" class="form-control" id="motivo" name="motivo" maxlength="255">
             </div>
             <button type="submit" class="btn btn-dourado mt-4">Confirmar Movimentação</button>
             <div th:if="${confirmacao}" class="alert alert-info mt-3" th:text="${mensagem}"></div>
         </form>
+
+        <!-- Seção para exibir o log de movimentações -->
+        <div class="mt-5">
+            <h3 class="text-dourado mb-4">Log de Movimentações</h3>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Tipo</th>
+                    <th>Motivo</th>
+                    <th>Data</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="mov : ${movimentacoes}">
+                    <td th:text="${mov.id}"></td>
+                    <td th:text="${mov.produto.nome}"></td>
+                    <td th:text="${mov.quantidade}"></td>
+                    <td th:text="${mov.movimento ? 'Entrada' : 'Saída'}"></td>
+                    <td th:text="${mov.motivo}"></td>
+                    <td th:text="${#temporals.format(mov.data, 'dd/MM/yyyy HH:mm')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </main>
 
@@ -101,7 +128,5 @@
         });
     }
 </script>
-
-
 </body>
 </html>

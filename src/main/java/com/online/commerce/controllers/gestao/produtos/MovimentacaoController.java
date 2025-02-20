@@ -24,6 +24,7 @@ public class MovimentacaoController {
     @GetMapping
     public String view(Model model){
         model.addAttribute("movimentacao", new Movimentacao());
+        model.addAttribute("movimentacoes", movimentacaoService.getMovimentacoes());
         return "gestao/produtos/movimentacao";
     }
 

@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MovimentacaoService {
 
@@ -52,6 +54,10 @@ public class MovimentacaoService {
         }
         movimentacaoRepository.save(movimentacao);
         return retorno;
+    }
+
+    public List<Movimentacao> getMovimentacoes(){
+        return movimentacaoRepository.findAll();
     }
 
 }

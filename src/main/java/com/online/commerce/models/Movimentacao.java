@@ -2,6 +2,7 @@ package com.online.commerce.models;
 
 import com.online.commerce.auth.models.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,12 +37,7 @@ public class Movimentacao {
     private boolean movimento;
     private boolean confirmacao;
 
+    @Size(max = 255, message = "O campo 'Motivo' não pode ter mais de 255 caracteres.")
     private String motivo;
-
-    public Movimentacao(Produto produto, int quantidade, boolean movimento){
-        this.produto = produto;
-        this.quantidade = quantidade;
-        this.movimento = movimento;
-    }
 
 }
