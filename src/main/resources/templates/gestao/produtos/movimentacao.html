@@ -16,7 +16,9 @@
                 </div>
                 <div class="col">
                     <label for="id" class="form-label">ID</label>
-                    <input th:field="*{produto.id}" type="text" class="form-control" id="id" name="id" disabled>
+                    <input th:field="*{produto.id}" type="text" class="form-control" id="idDisplay" name="idDisplay" disabled>
+                    <!-- Campo oculto para enviar o valor -->
+                    <input th:field="*{produto.id}" type="hidden" id="id" name="id">
                 </div>
             </div>
             <div class="mb-3">
@@ -38,10 +40,10 @@
             </div>
             <div class="mb-3" id="motivoContainer">
                 <label for="motivo" class="form-label">Motivo</label>
-                <input type="text" class="form-control" id="motivo" name="motivo">
+                <input th:field="*{motivo}" type="text" class="form-control" id="motivo" name="motivo">
             </div>
             <button type="submit" class="btn btn-dourado mt-4">Confirmar Movimentação</button>
-            <div th:if="${mensagem}" class="alert alert-info mt-3" th:text="${mensagem}"></div>
+            <div th:if="${confirmacao}" class="alert alert-info mt-3" th:text="${mensagem}"></div>
         </form>
     </div>
 </main>
@@ -88,6 +90,9 @@
             return response.json();
         })
             .then(produto => {
+            // Preenche o campo desabilitado (exibição)
+            document.getElementById("idDisplay").value = produto.id;
+            // Preenche o campo oculto (envio)
             document.getElementById("id").value = produto.id;
             document.getElementById("descricao").value = produto.nome;
         })

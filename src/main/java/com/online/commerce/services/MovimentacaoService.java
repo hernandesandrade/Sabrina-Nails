@@ -1,13 +1,22 @@
 package com.online.commerce.services;
 
+import com.online.commerce.auth.models.User;
+import com.online.commerce.auth.repositories.UserRepository;
+import com.online.commerce.auth.services.UserService;
 import com.online.commerce.models.Movimentacao;
 import com.online.commerce.models.Produto;
 import com.online.commerce.repositories.MovimentacaoRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MovimentacaoService {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ProdutoService produtoService;
@@ -15,29 +24,33 @@ public class MovimentacaoService {
     @Autowired
     private MovimentacaoRepository movimentacaoRepository;
 
-    public String processar(Long produtoId, int quantidade, boolean movimento){
+    @Autowired
+    private UserRepository userRepository;
 
-        System.out.println("id: " + produtoId);
-
-        Produto produto = produtoService.getProduto(produtoId);
+    public String processar(Movimentacao movimentacao, HttpServletRequest request){
+        movimentacao.setUser(userService.getUser(request));
+        Produto produto = produtoService.getProduto(movimentacao.getProduto().getId());
         if (produto == null){
             return "false%Produto inexistente.";
         }
         String retorno = "";
-        if (movimento){
-            produto.setEstoque(produto.getEstoque() + quantidade);
+        if (movimentacao.isMovimento()){
+            produto.setEstoque(produto.getEstoque() + movimentacao.getQuantidade());
             produtoService.salvarProduto(produto);
+            movimentacao.setConfirmacao(true);
             retorno = "true%A entrada de estoque foi feita com sucesso.";
         }else {
-            if (quantidade > produto.getEstoque()){
+            if (movimentacao.getQuantidade() > produto.getEstoque()){
+                movimentacao.setConfirmacao(false);
                 retorno = "false%Nao é possivel remover mais do que existe no estoque.";
             }else{
-                produto.setEstoque(0);
+                produto.setEstoque(produto.getEstoque() - movimentacao.getQuantidade());
                 produtoService.salvarProduto(produto);
+                movimentacao.setConfirmacao(true);
                 retorno = "true%A saida de estoque foi feita com sucesso.";
             }
         }
-        movimentacaoRepository.save(new Movimentacao(produto, quantidade, movimento));
+        movimentacaoRepository.save(movimentacao);
         return retorno;
     }
 

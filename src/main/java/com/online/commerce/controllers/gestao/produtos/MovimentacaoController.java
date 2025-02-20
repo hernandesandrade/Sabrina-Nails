@@ -4,6 +4,7 @@ import com.online.commerce.models.Movimentacao;
 import com.online.commerce.models.Produto;
 import com.online.commerce.services.MovimentacaoService;
 import com.online.commerce.services.ProdutoService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -35,13 +36,12 @@ public class MovimentacaoController {
 
 
     @PostMapping("/processar")
-    public String processarMovimentacao(@ModelAttribute("movimentacao") Movimentacao movimentacao, Model model) {
-        String resultado = movimentacaoService.processar(
-                movimentacao.getProduto().getId(),
-                movimentacao.getQuantidade(),
-                movimentacao.isMovimento()
-        );
-        model.addAttribute("mensagem", resultado);
+    public String processarMovimentacao(@ModelAttribute("movimentacao") Movimentacao movimentacao, Model model, HttpServletRequest request) {
+        String retorno = movimentacaoService.processar(movimentacao, request);
+        boolean confirmacao = Boolean.parseBoolean(retorno.split("%")[0]);
+        String mensagem = retorno.split("%")[1];
+        model.addAttribute("mensagem", mensagem);
+        model.addAttribute("estado", confirmacao);
         return "redirect:/movimentacao";
     }
 

@@ -46,7 +46,7 @@ public class ProdutoService {
     public Page<Produto> listarProdutos(int pagina,
                                         String pesquisa) {
         int paginaCorrigida = Math.max(pagina - 1, 0);
-        Pageable pageable = PageRequest.of(paginaCorrigida, 10);
+        Pageable pageable = PageRequest.of(paginaCorrigida, 9);
         if (pesquisa != null && !pesquisa.trim().isEmpty()) {
             if (pesquisa.matches("\\d+")) {
                 if (isValidEAN13(pesquisa)) {
