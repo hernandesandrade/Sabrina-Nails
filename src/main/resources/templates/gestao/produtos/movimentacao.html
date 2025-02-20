@@ -8,14 +8,14 @@
 <main class="bg-pastel py-5">
     <div class="container-novo">
         <h2 class="text-dourado mb-4">Movimentação de Estoque</h2>
-        <form th:object="${movimentacao}" action="/movimentacao/processar" method="post">
+        <form th:object="${movimentacao}" action="/gestao-produtos/movimentacao/processar" method="post">
             <div class="row mb-3">
                 <div class="col">
                     <label for="codigo" class="form-label">Código</label>
                     <input th:field="*{produto.codigoBarras}" type="text" class="form-control" id="codigo" name="codigo">
                 </div>
                 <div class="col">
-                    <label for="id" class="form-label">ID</label>
+                    <label for="idDisplay" class="form-label">ID</label>
                     <input th:field="*{produto.id}" type="text" class="form-control" id="idDisplay" name="idDisplay" disabled>
                     <!-- Campo oculto para enviar o valor -->
                     <input th:field="*{produto.id}" type="hidden" id="id" name="id">
@@ -47,13 +47,15 @@
         </form>
 
         <!-- Seção para exibir o log de movimentações -->
-        <div class="mt-5">
+    </div>
+    <div class="container-novo mt-5">
+        <div>
             <h3 class="text-dourado mb-4">Log de Movimentações</h3>
             <table class="table table-striped">
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Produto</th>
+                    <th>Código</th>
                     <th>Quantidade</th>
                     <th>Tipo</th>
                     <th>Motivo</th>
@@ -61,17 +63,21 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="mov : ${movimentacoes}">
-                    <td th:text="${mov.id}"></td>
-                    <td th:text="${mov.produto.nome}"></td>
+                <tr th:each="mov : ${movimentacoes}" th:class="${mov.confirmacao} ? '' : 'bg-danger-transparent'">
+                    <td th:text="${mov.produto.id}"></td>
+                    <td th:text="${mov.produto.codigoBarras}"></td>
                     <td th:text="${mov.quantidade}"></td>
-                    <td th:text="${mov.movimento ? 'Entrada' : 'Saída'}"></td>
+                    <td>
+                        <span th:if="${mov.movimento}" class="my-text-success">Entrada</span>
+                        <span th:unless="${mov.movimento}" class="my-text-danger">Saída</span>
+                    </td>
                     <td th:text="${mov.motivo}"></td>
                     <td th:text="${#temporals.format(mov.data, 'dd/MM/yyyy HH:mm')}"></td>
                 </tr>
                 </tbody>
             </table>
         </div>
+
     </div>
 </main>
 
@@ -109,7 +115,7 @@
         let codigo = document.getElementById("codigo").value.trim();
         if (codigo === "") return;
 
-        fetch(`/movimentacao/produto/${codigo}`)
+        fetch(`/gestao-produtos/movimentacao/produto/${codigo}`)
             .then(response => {
             if (!response.ok) {
                 throw new Error("Produto não encontrado");

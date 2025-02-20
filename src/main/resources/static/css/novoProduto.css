@@ -197,3 +197,20 @@ button:disabled {
     background-color: #e3e3e3;
     border-color: #888;
 }
+
+.my-text-success {
+    color: green;
+    font-weight: bold;
+}
+
+.my-text-danger {
+    color: red;
+    font-weight: bold;
+}
+
+tr.bg-danger-transparent td {
+    background-color: #ff000025 !important;
+}
+
+
+
