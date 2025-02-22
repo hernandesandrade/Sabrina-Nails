@@ -7,93 +7,96 @@
 <div th:replace="~{fragmentos/header :: headerPequeno}"></div>
 
 <main class="bg-pastel py-5">
-  <div class="container">
-    <!-- Seção de Gestão de Produtos -->
-    <section id="gestao-produtos" class="mb-5">
-      <div class="container-title">
-        <h2 class="text-dourado mb-4">Gestão de Produtos</h2>
-      </div>
-
-      <!-- Barra de pesquisa -->
-      <div class="row mb-4">
-        <form th:action="@{/gestao-produtos}" method="get" class="col-12">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Buscar produto..." name="pesquisa" th:value="${pesquisa}">
-            <div class="input-group-append">
-              <button class="btn btn-dourado" type="submit">Pesquisar</button>
+    <div class="container">
+        <!-- Seção de Gestão de Produtos -->
+        <section id="gestao-produtos" class="mb-5">
+            <div class="container-title">
+                <h2 class="text-dourado mb-4">Gestão de Produtos</h2>
             </div>
-          </div>
-        </form>
-      </div>
-      <div class="mb-4">
-        <a class="btn btn-dourado" href="/gestao-produtos/novo">
-          <i class="fas fa-plus"></i> Novo Produto
-        </a>
-      </div>
 
-      <div class="row">
-        <div class="col-12 text-center mb-4" th:if="${#lists.isEmpty(produtos)}">
-          <span class="text-muted">Nenhum produto encontrado.</span>
-        </div>
-        <table class="table table-hover" th:unless="${#lists.isEmpty(produtos)}">
-          <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Cód. Barras</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Preço</th>
-            <th scope="col">Preço DePor</th>
-            <th scope="col">Estoque</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="produto : ${produtos}">
-            <th class="col-1" scope="row" th:text="${produto.id}">ID</th>
-            <td class="col-2" th:text="${produto.codigoBarras}">Código de Barras</td>
-            <td class="col-4" th:text="${produto.nome}">Nome do Produto</td>
-            <td class="col-2" th:text="${produto.preco}">Preço</td>
-            <td class="col-2" th:text="${produto.precoDePor}">Preço DePor</td>
-            <td class="col-1" th:text="${produto.estoque}">Estoque</td>
-            <td class="col-1">
-              <a th:href="@{/gestao-produtos/produto/{produtoId}(produtoId = ${produto.id})}" class="btn">Detalhes</a>
-            </td>
-            <td class="col-1">
-              <a th:href="@{/gestao-produtos/editar/{produtoId}(produtoId = ${produto.id})}" class="btn">Editar</a>
-            </td>
-            <td class="col-1">
-              <button class="btn" data-bs-toggle="modal" data-bs-target="#confirmacaoExclusao"
-                      th:data-produto-id="${produto.id}">Deletar</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        <nav th:replace="~{fragmentos/paginacao :: paginas}"></nav>
-      </div>
+            <!-- Barra de pesquisa -->
+            <div class="row mb-4">
+                <form th:action="@{/gestao-produtos}" method="get" class="col-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Buscar produto..." name="pesquisa"
+                               th:value="${pesquisa}">
+                        <div class="input-group-append">
+                            <button class="btn btn-dourado" type="submit">Pesquisar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="mb-4">
+                <a class="btn btn-dourado" href="/gestao-produtos/novo">
+                    <i class="fas fa-plus"></i> Novo Produto
+                </a>
+            </div>
 
-    </section>
-  </div>
+            <div class="row">
+                <div class="col-12 text-center mb-4" th:if="${#lists.isEmpty(produtos)}">
+                    <span class="text-muted">Nenhum produto encontrado.</span>
+                </div>
+                <table class="table table-hover" th:unless="${#lists.isEmpty(produtos)}">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Cód. Barras</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Preço</th>
+                        <th scope="col">Preço DePor</th>
+                        <th scope="col">Estoque</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="produto : ${produtos}">
+                        <th class="col-1" scope="row" th:text="${produto.id}">ID</th>
+                        <td class="col-2" th:text="${produto.codigoBarras}">Código de Barras</td>
+                        <td class="col-4" th:text="${produto.nome}">Nome do Produto</td>
+                        <td class="col-2" th:text="${produto.preco}">Preço</td>
+                        <td class="col-2" th:text="${produto.precoDePor}">Preço DePor</td>
+                        <td class="col-1" th:text="${produto.estoque}">Estoque</td>
+                        <td class="col-1">
+                            <a th:href="@{/gestao-produtos/produto/{produtoId}(produtoId = ${produto.id})}" class="btn">Detalhes</a>
+                        </td>
+                        <td class="col-1">
+                            <a th:href="@{/gestao-produtos/editar/{produtoId}(produtoId = ${produto.id})}" class="btn">Editar</a>
+                        </td>
+                        <td class="col-1">
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#confirmacaoExclusao"
+                                    th:data-produto-id="${produto.id}">Deletar
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <nav th:replace="~{fragmentos/paginacao :: paginas('/gestao-produtos')}"></nav>
+            </div>
+
+        </section>
+    </div>
 </main>
 
 <!-- Modal de Confirmação -->
-<div class="modal fade" id="confirmacaoExclusao" tabindex="-1" role="dialog" aria-labelledby="confirmacaoExclusaoLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmacaoExclusaoLabel">Confirmar Exclusão</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-      </div>
-      <div class="modal-body">
-        Deseja excluir este produto?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
-        <a id="confirmarExclusao" class="btn btn-danger">Sim</a>
-      </div>
+<div class="modal fade" id="confirmacaoExclusao" tabindex="-1" role="dialog" aria-labelledby="confirmacaoExclusaoLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmacaoExclusaoLabel">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                Deseja excluir este produto?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                <a id="confirmarExclusao" class="btn btn-danger">Sim</a>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <footer th:replace="~{fragmentos/footer :: footer}"></footer>
@@ -101,22 +104,22 @@
 
 <!-- Adicionando JavaScript para abrir o modal com o produtoId -->
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var modal = new bootstrap.Modal(document.getElementById('confirmacaoExclusao'));
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = new bootstrap.Modal(document.getElementById('confirmacaoExclusao'));
 
-    // Manipulador de evento para quando o botão Deletar for clicado
-    var deleteButtons = document.querySelectorAll('button[data-bs-toggle="modal"]');
-    deleteButtons.forEach(function (button) {
-      button.addEventListener('click', function () {
-        var produtoId = this.getAttribute('data-produto-id');
-        var confirmarExclusao = document.getElementById("confirmarExclusao");
-        confirmarExclusao.href = `/gestao-produtos/deletar/${produtoId}`;
+        // Manipulador de evento para quando o botão Deletar for clicado
+        var deleteButtons = document.querySelectorAll('button[data-bs-toggle="modal"]');
+        deleteButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var produtoId = this.getAttribute('data-produto-id');
+                var confirmarExclusao = document.getElementById("confirmarExclusao");
+                confirmarExclusao.href = `/gestao-produtos/deletar/${produtoId}`;
 
-        // Exibe o modal de confirmação
-        modal.show();
-      });
+                // Exibe o modal de confirmação
+                modal.show();
+            });
+        });
     });
-  });
 </script>
 </body>
 </html>

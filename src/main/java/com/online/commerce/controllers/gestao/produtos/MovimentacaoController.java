@@ -8,7 +8,6 @@ import com.online.commerce.services.ProdutoService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,15 +27,26 @@ public class MovimentacaoController {
     MovimentacaoRepository movimentacaoRepository;
 
     @GetMapping
-    public String view(@RequestParam(defaultValue = "0") int page,
-                       @RequestParam(defaultValue = "10") int size,
-                       Model model){
-        Page<Movimentacao> movimentacoes = movimentacaoRepository.findAll(PageRequest.of(page, size));
+    public String view(@RequestParam(name = "pesquisa", required = false) String pesquisa, @RequestParam(defaultValue = "1") int pagina, Model model){
+        Page<Movimentacao> movimentacoes = movimentacaoService.listarMovimentacoes(pagina, pesquisa);
 
-        // Adiciona a lista de movimentações ao modelo
-        model.addAttribute("movimentacoes", movimentacoes);
-        model.addAttribute("movimentacao", new Movimentacao());
-        model.addAttribute("movimentacoes", movimentacaoService.getMovimentacoes());
+        int totalPaginas = movimentacoes.getTotalPages();
+        if (totalPaginas == 0) {
+            totalPaginas = 1;
+        }
+        int paginasExibidas = 3;
+        int startPage = Math.max(pagina - 1, 1);
+        int endPage = Math.min(startPage + paginasExibidas - 1, totalPaginas);
+
+        model.addAttribute("movimentacoes", movimentacoes.getContent());
+        model.addAttribute("paginaAtual", pagina);
+        model.addAttribute("totalPaginas", totalPaginas);
+        model.addAttribute("pesquisa", pesquisa);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        Movimentacao mov = new Movimentacao();
+        mov.setMovimento(true);
+        model.addAttribute("movimentacao", mov);
         return "gestao/produtos/movimentacao";
     }
 

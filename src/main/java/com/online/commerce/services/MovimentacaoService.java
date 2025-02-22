@@ -8,6 +8,9 @@ import com.online.commerce.models.Produto;
 import com.online.commerce.repositories.MovimentacaoRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -29,23 +32,23 @@ public class MovimentacaoService {
     @Autowired
     private UserRepository userRepository;
 
-    public String processar(Movimentacao movimentacao, HttpServletRequest request){
+    public String processar(Movimentacao movimentacao, HttpServletRequest request) {
         movimentacao.setUser(userService.getUser(request));
         Produto produto = produtoService.getProduto(movimentacao.getProduto().getId());
-        if (produto == null){
+        if (produto == null) {
             return "false%Produto inexistente.";
         }
         String retorno = "";
-        if (movimentacao.isMovimento()){
+        if (movimentacao.isMovimento()) {
             produto.setEstoque(produto.getEstoque() + movimentacao.getQuantidade());
             produtoService.salvarProduto(produto);
             movimentacao.setConfirmacao(true);
             retorno = "true%A entrada de estoque foi feita com sucesso.";
-        }else {
-            if (movimentacao.getQuantidade() > produto.getEstoque()){
+        } else {
+            if (movimentacao.getQuantidade() > produto.getEstoque()) {
                 movimentacao.setConfirmacao(false);
                 retorno = "false%Nao é possivel remover mais do que existe no estoque.";
-            }else{
+            } else {
                 produto.setEstoque(produto.getEstoque() - movimentacao.getQuantidade());
                 produtoService.salvarProduto(produto);
                 movimentacao.setConfirmacao(true);
@@ -56,8 +59,14 @@ public class MovimentacaoService {
         return retorno;
     }
 
-    public List<Movimentacao> getMovimentacoes(){
+    public List<Movimentacao> getMovimentacoes() {
         return movimentacaoRepository.findAll();
+    }
+
+    public Page<Movimentacao> listarMovimentacoes(int pagina, String pesquisa) {
+        int paginaCorrigida = Math.max(pagina - 1, 0);
+        Pageable pageable = PageRequest.of(paginaCorrigida, 5);
+        return movimentacaoRepository.findAllByOrderByDataDesc(pageable);
     }
 
 }

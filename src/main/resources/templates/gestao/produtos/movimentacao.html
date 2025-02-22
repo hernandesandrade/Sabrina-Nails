@@ -9,7 +9,7 @@
     <div class="container-novo">
         <h2 class="text-dourado mb-4">Movimentação de Estoque</h2>
         <form th:object="${movimentacao}" action="/gestao-produtos/movimentacao/processar" method="post">
-            <div class="row mb-3">
+            <div class="row">
                 <div class="col">
                     <label for="codigo" class="form-label">Código</label>
                     <input th:field="*{produto.codigoBarras}" type="text" class="form-control" id="codigo" name="codigo">
@@ -21,11 +21,11 @@
                     <input th:field="*{produto.id}" type="hidden" id="id" name="id">
                 </div>
             </div>
-            <div class="mb-3">
+            <div class="">
                 <label for="descricao" class="form-label">Descrição</label>
                 <input type="text" class="form-control" id="descricao" name="descricao" disabled>
             </div>
-            <div class="row mb-3">
+            <div class="row">
                 <div class="col">
                     <label for="quantidade" class="form-label">Quantidade</label>
                     <input th:field="*{quantidade}" type="number" class="form-control" id="quantidade" name="quantidade" min="1" value="1" required>
@@ -38,7 +38,7 @@
                     </select>
                 </div>
             </div>
-            <div class="mb-3" id="motivoContainer">
+            <div id="motivoContainer">
                 <label for="motivo" class="form-label">Motivo</label>
                 <input th:field="*{motivo}" type="text" class="form-control" id="motivo" name="motivo" maxlength="255">
             </div>
@@ -51,6 +51,7 @@
     <div class="container-novo mt-5">
         <div>
             <h3 class="text-dourado mb-4">Log de Movimentações</h3>
+            <nav th:replace="~{fragmentos/paginacao :: paginas('/gestao-produtos/movimentacao')}"></nav>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -71,7 +72,7 @@
                         <span th:if="${mov.movimento}" class="my-text-success">Entrada</span>
                         <span th:unless="${mov.movimento}" class="my-text-danger">Saída</span>
                     </td>
-                    <td th:text="${mov.motivo}"></td>
+                    <td th:text="${mov.user.name}"></td>
                     <td th:text="${#temporals.format(mov.data, 'dd/MM/yyyy HH:mm')}"></td>
                 </tr>
                 </tbody>
