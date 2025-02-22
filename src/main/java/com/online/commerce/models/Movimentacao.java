@@ -33,8 +33,8 @@ public class Movimentacao {
     @Column(nullable = false, updatable = false)
     private LocalDateTime data = LocalDateTime.now();
 
-    private int quantidade;
-    private boolean movimento;
+    private int quantidade = 0;
+    private boolean movimento = true;
     private boolean confirmacao;
 
     @Size(max = 255, message = "O campo 'Motivo' não pode ter mais de 255 caracteres.")

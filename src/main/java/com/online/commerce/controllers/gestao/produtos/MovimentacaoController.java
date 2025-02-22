@@ -44,9 +44,7 @@ public class MovimentacaoController {
         model.addAttribute("pesquisa", pesquisa);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-        Movimentacao mov = new Movimentacao();
-        mov.setMovimento(true);
-        model.addAttribute("movimentacao", mov);
+        model.addAttribute("movimentacao", new Movimentacao());
         return "gestao/produtos/movimentacao";
     }
 

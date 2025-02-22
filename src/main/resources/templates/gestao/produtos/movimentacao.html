@@ -72,7 +72,7 @@
                         <span th:if="${mov.movimento}" class="my-text-success">Entrada</span>
                         <span th:unless="${mov.movimento}" class="my-text-danger">Saída</span>
                     </td>
-                    <td th:text="${mov.user.name}"></td>
+                    <td th:text="${mov.motivo}"></td>
                     <td th:text="${#temporals.format(mov.data, 'dd/MM/yyyy HH:mm')}"></td>
                 </tr>
                 </tbody>
@@ -114,11 +114,23 @@
 
     function buscarProduto() {
         let codigo = document.getElementById("codigo").value.trim();
-        if (codigo === "") return;
+        if (codigo === "") {
+            document.getElementById("codigo").focus();
+            document.getElementById("id").value = "";
+            document.getElementById("idDisplay").value = "";
+            document.getElementById("descricao").value = "";
+            document.getElementById("quantidade").value = "";
+            return;
+        }
 
         fetch(`/gestao-produtos/movimentacao/produto/${codigo}`)
             .then(response => {
             if (!response.ok) {
+                document.getElementById("codigo").focus();
+                document.getElementById("id").value = "";
+                document.getElementById("idDisplay").value = "";
+                document.getElementById("descricao").value = "";
+                document.getElementById("quantidade").value = "";
                 throw new Error("Produto não encontrado");
             }
             return response.json();
@@ -129,6 +141,9 @@
             // Preenche o campo oculto (envio)
             document.getElementById("id").value = produto.id;
             document.getElementById("descricao").value = produto.nome;
+            document.getElementById("quantidade").value = "";
+            let quantidadeField = document.getElementById("quantidade");
+            quantidadeField.focus(); // Move o foco para o campo "quantidade"
         })
             .catch(error => {
             alert(error.message);
