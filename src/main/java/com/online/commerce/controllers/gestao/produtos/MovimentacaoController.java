@@ -58,13 +58,15 @@ public class MovimentacaoController {
 
     @PostMapping("/processar")
     public String processarMovimentacao(@ModelAttribute("movimentacao") Movimentacao movimentacao, Model model, HttpServletRequest request) {
-        String retorno = movimentacaoService.processar(movimentacao, request);
-        boolean confirmacao = Boolean.parseBoolean(retorno.split("%")[0]);
-        String mensagem = retorno.split("%")[1];
-        model.addAttribute("mensagem", mensagem);
-        model.addAttribute("estado", confirmacao);
+        movimentacaoService.processar(movimentacao, request);
         return "redirect:/gestao-produtos/movimentacao";
     }
 
+    @GetMapping("/{movimentacaoId}")
+    public String detalhesMovimentacao(@PathVariable Long movimentacaoId, Model model) {
+        Movimentacao movimentacao = movimentacaoService.getMovimentacao(movimentacaoId);
+        model.addAttribute("movimentacao", movimentacao);
+        return "/gestao/produtos/detalhesMovimentacao";
+    }
 
 }

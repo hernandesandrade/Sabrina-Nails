@@ -208,9 +208,15 @@ button:disabled {
     font-weight: bold;
 }
 
+.bg-danger-transparent{
+    background-color: #ff000025 !important;
+}
+
 tr.bg-danger-transparent td {
     background-color: #ff000025 !important;
 }
+
+
 
 
 

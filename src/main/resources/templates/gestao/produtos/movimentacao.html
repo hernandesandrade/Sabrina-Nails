@@ -55,11 +55,10 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Código</th>
+                    <th>Cód. de Barras</th>
                     <th>Quantidade</th>
                     <th>Tipo</th>
-                    <th>Motivo</th>
                     <th>Data</th>
                 </tr>
                 </thead>
@@ -72,8 +71,8 @@
                         <span th:if="${mov.movimento}" class="my-text-success">Entrada</span>
                         <span th:unless="${mov.movimento}" class="my-text-danger">Saída</span>
                     </td>
-                    <td th:text="${mov.motivo}"></td>
                     <td th:text="${#temporals.format(mov.data, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td><a th:href="@{/gestao-produtos/movimentacao/{movimentacaoId}(movimentacaoId = ${mov.id})}" class="btn pt-0 pb-0">Detalhes</a></td>
                 </tr>
                 </tbody>
             </table>
@@ -119,7 +118,7 @@
             document.getElementById("id").value = "";
             document.getElementById("idDisplay").value = "";
             document.getElementById("descricao").value = "";
-            document.getElementById("quantidade").value = "";
+            document.getElementById("quantidade").value = "0";
             return;
         }
 
@@ -130,7 +129,7 @@
                 document.getElementById("id").value = "";
                 document.getElementById("idDisplay").value = "";
                 document.getElementById("descricao").value = "";
-                document.getElementById("quantidade").value = "";
+                document.getElementById("quantidade").value = "0";
                 throw new Error("Produto não encontrado");
             }
             return response.json();

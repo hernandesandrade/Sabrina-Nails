@@ -1,0 +1,39 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Detalhes da Movimentação', '/css/novoProduto.css')}"></head>
+<body>
+<header th:replace="~{fragmentos/header :: headerGrande}"></header>
+<div th:replace="~{fragmentos/header :: headerPequeno}"></div>
+
+<main class="bg-pastel py-5">
+  <div class="container-novo">
+    <h2 class="text-dourado mb-4" th:text="'Detalhes da Movimentação #' + ${movimentacao.id}"></h2>
+    <div class="card">
+      <div class="card-body">
+        <p class="card-text bg-danger-transparent" th:if="${movimentacao.erro != null and !movimentacao.erro.isEmpty()}">
+          <strong>Erro:</strong> <span th:text="${movimentacao.erro}"></span>
+        </p>
+        <p class="card-text"><strong>Produto:</strong> <span th:text="${movimentacao.produto.id}"></span></p>
+        <p class="card-text"><strong>Código do Produto:</strong> <span th:text="${movimentacao.produto.codigoBarras}"></span></p>
+        <p class="card-text"><strong>Descrição do Produto:</strong> <span th:text="${movimentacao.produto.nome}"></span></p>
+        <p class="card-text"><strong>Quantidade:</strong> <span th:text="${movimentacao.quantidade}"></span></p>
+        <p class="card-text">
+          <strong>Tipo de Movimentação:</strong>
+          <span th:if="${movimentacao.movimento}" class="my-text-success">Entrada</span>
+          <span th:unless="${movimentacao.movimento}" class="my-text-danger">Saída</span>
+        </p>
+        <p class="card-text" th:if="${movimentacao.motivo != null and !movimentacao.motivo.isEmpty()}">
+          <strong>Motivo:</strong> <span th:text="${movimentacao.motivo}"></span>
+        </p>
+        <p class="card-text"><strong>Data:</strong> <span th:text="${#temporals.format(movimentacao.data, 'dd/MM/yyyy HH:mm')}"></span></p>
+        <p class="card-text"><strong>Feito por:</strong> <span th:text="${movimentacao.user.name}"></span></p>
+        <a th:href="@{/gestao-produtos/movimentacao}" class="btn btn-dourado">Voltar</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer th:replace="~{fragmentos/footer :: footer}"></footer>
+<script th:replace="~{fragmentos/bootStrap :: script}"></script>
+</body>
+</html>

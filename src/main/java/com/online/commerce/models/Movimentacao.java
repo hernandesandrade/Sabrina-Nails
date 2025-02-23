@@ -40,4 +40,6 @@ public class Movimentacao {
     @Size(max = 255, message = "O campo 'Motivo' não pode ter mais de 255 caracteres.")
     private String motivo;
 
+    private String erro;
+
 }

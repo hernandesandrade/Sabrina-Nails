@@ -32,31 +32,32 @@ public class MovimentacaoService {
     @Autowired
     private UserRepository userRepository;
 
-    public String processar(Movimentacao movimentacao, HttpServletRequest request) {
+    public Movimentacao getMovimentacao(Long id){
+        return movimentacaoRepository.findById(id).orElseThrow(() -> new RuntimeException("Movimentação nao encontrada."));
+    }
+
+    public void processar(Movimentacao movimentacao, HttpServletRequest request) {
         movimentacao.setUser(userService.getUser(request));
         Produto produto = produtoService.getProduto(movimentacao.getProduto().getId());
         if (produto == null) {
-            return "false%Produto inexistente.";
-        }
-        String retorno = "";
-        if (movimentacao.isMovimento()) {
-            produto.setEstoque(produto.getEstoque() + movimentacao.getQuantidade());
-            produtoService.salvarProduto(produto);
-            movimentacao.setConfirmacao(true);
-            retorno = "true%A entrada de estoque foi feita com sucesso.";
-        } else {
-            if (movimentacao.getQuantidade() > produto.getEstoque()) {
-                movimentacao.setConfirmacao(false);
-                retorno = "false%Nao é possivel remover mais do que existe no estoque.";
-            } else {
-                produto.setEstoque(produto.getEstoque() - movimentacao.getQuantidade());
+            movimentacao.setErro("Produto nao encontrado.");
+        }else{
+            if (movimentacao.isMovimento()) {
+                produto.setEstoque(produto.getEstoque() + movimentacao.getQuantidade());
                 produtoService.salvarProduto(produto);
                 movimentacao.setConfirmacao(true);
-                retorno = "true%A saida de estoque foi feita com sucesso.";
+            } else {
+                if (movimentacao.getQuantidade() > produto.getEstoque()) {
+                    movimentacao.setConfirmacao(false);
+                    movimentacao.setErro("Nao é possivel remover mais do que existe no estoque.");
+                } else {
+                    produto.setEstoque(produto.getEstoque() - movimentacao.getQuantidade());
+                    produtoService.salvarProduto(produto);
+                    movimentacao.setConfirmacao(true);
+                }
             }
         }
         movimentacaoRepository.save(movimentacao);
-        return retorno;
     }
 
     public List<Movimentacao> getMovimentacoes() {
