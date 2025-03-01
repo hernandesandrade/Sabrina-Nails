@@ -27,6 +27,7 @@ public class CarrinhoService {
 
         if (principal instanceof UserDetails) {
             String username = ((UserDetails) principal).getUsername();
+            System.out.println(username);
             return userRepository.findByName(username); // Ajuste conforme seu repositório
         }
 

@@ -1,10 +1,14 @@
 package com.online.commerce.controllers;
 
+import com.online.commerce.models.ItemCarrinho;
 import com.online.commerce.services.CarrinhoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/carrinho")
@@ -15,6 +19,13 @@ public class CarrinhoController {
 
     @GetMapping
     public String visualizarCarrinho(Model model) {
+        List<ItemCarrinho> itens = carrinhoService.obterCarrinhoDoCliente().getItens();
+        double total = itens.stream()
+                .mapToDouble(item -> Double.parseDouble(String.valueOf(item.getProduto().getPreco().multiply(BigDecimal.valueOf(item.getQuantidade())))))
+                .sum();
+        String totalFormatado = String.format("%.2f", total);
+        model.addAttribute("total", totalFormatado);
+        model.addAttribute("item", itens);
         model.addAttribute("carrinho", carrinhoService.obterCarrinhoDoCliente());
         return "carrinho"; // Retorna a página HTML chamada "carrinho.html"
     }
