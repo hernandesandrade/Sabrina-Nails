@@ -65,7 +65,7 @@ public class GestaoProdutosController {
 
     @PostMapping("/salvar")
     public String salvarProduto(@RequestParam("fotos") MultipartFile[] fotos, Produto produto) {
-        String msg = produtoService.salvarNovoProduto(fotos, produto);
+        String msg = produtoService.salvarProduto(fotos, produto);
         System.out.println("=================");
         System.out.println(msg);
         System.out.println();
